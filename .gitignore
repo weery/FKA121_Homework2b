@@ -1,0 +1,27 @@
+# .gitignore
+
+# Compiled object files
+*.o
+*.obj
+
+# Executables
+*.exe
+*.out
+*.app
+
+MD # explicitly ignoring the MD executable on linux systems
+code/*/MD
+
+# Data files
+*.dat
+
+# Figures
+#*.pdf
+
+# Misc. report stuff
+report/*.aux
+report/*.log
+report/*.gz
+
+# Tikz files in code
+code/*.tikz
