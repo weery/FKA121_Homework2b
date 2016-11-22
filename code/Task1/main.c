@@ -44,7 +44,7 @@ int main()
     e4pi    = 1;
     alpha   = 0.1;
 
-    double monte = montecarles(1000000, trial_wave, nbr_of_dimensions, alpha);
+    double monte = montecarlo(1000000, trial_wave, nbr_of_dimensions, alpha);
 
     printf("%e \n", monte );
 
