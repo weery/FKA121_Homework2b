@@ -3,6 +3,8 @@
 
 void Initialize_Generator();
 double randq();
+int randint(int, int);
+double randdouble(double, double);
 void Free_Generator();
 
 #endif

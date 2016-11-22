@@ -26,3 +26,17 @@ void Free_Generator()
 {
     gsl_rng_free(q);
 }
+
+int randint(int min, int max)
+{
+	double r= randq();
+	int val = (int)(min +(double)(max-min)*r+0.5);
+	return val;
+}
+
+double randdouble(double min, double max)
+{
+	double r = randq();
+	double val = min+(max-min)*r;
+	return val;
+}

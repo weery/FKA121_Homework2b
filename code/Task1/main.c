@@ -210,6 +210,6 @@ double mean(double* arr, int N)
 
 double density_probability(double r, double Z)
 {
-    double prob=pow(z,3)*4*pow(r,2)*exp(-2*Z*r);
+    double prob=pow(Z,3)*4*pow(r,2)*exp(-2*Z*r);
     return prob;
 }
