@@ -17,7 +17,7 @@ double  local_energy(double*, double*, int, double);
 double  array_mult(double*, double*, int);
 void    new_configuration(double *, double*, int);
 void    array_scalar(double*,double*, int, double);
-double  montecarles(int N, double(), int, double);
+double  montecarlo(int N, double(), int, double);
 double  relative_probability(double*, double* ,double* , double* , int , double , double ());
 double  mean(double*, int);
 
@@ -148,7 +148,7 @@ void array_scalar(double* arr_out, double* arr , int N , double scalar)
 }
 
 
-double  montecarles(int N, double (*f)(double*,double*,int,double), int dims, double alpha)
+double  montecarlo(int N, double (*f)(double*,double*,int,double), int dims, double alpha)
 {
     double r_1[dims];
     double r_2[dims];
