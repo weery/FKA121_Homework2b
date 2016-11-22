@@ -17,6 +17,8 @@ double  local_energy(double*, double*, int, double);
 double  array_mult(double*, double*, int);
 void    new_configuration(double *, double*, int);
 void    array_scalar(double*,double*, int, double);
+double  montecarles(int N, double(), int);
+double  relative_probability(double*, double* ,double* , double* , int , double , double (*f)())
 
 
 // MAIN PROGRAM
@@ -33,8 +35,7 @@ int main()
     double e4pi;
     double alpha;
 
-    double r_1[nbr_of_dimensions];
-    double r_2[nbr_of_dimensions];
+
 
     // Initialize Variables
     h_bar   = 1;
@@ -45,13 +46,7 @@ int main()
 
 
 
-    new_configuration(r_1,r_2, nbr_of_dimensions);
 
-    double trial = trial_wave(r_1,r_2,nbr_of_dimensions,alpha);
-
-    double energy = local_energy(r_1,r_2,nbr_of_dimensions,alpha);
-
-    printf("%e \t %e \n", trial,energy);
     // Free the gsl random number generator
     Free_Generator();
     return 0;
@@ -59,17 +54,16 @@ int main()
 
 // HELPER FUNCTION DEFINITIONS
 // ------------------------------------------------------------------
-double relative_probability(double* r_1, double* r_2,double* R_1, double* R_2, int dims, double alpha)
+double relative_probability(double* r_1, double* r_2,double* R_1, double* R_2, int dims, double alpha, double (*f)(double*,double*,int,double))
 {
-    double trial_1 = trial_wave(r_1,r_2,dims,alpha);
-    double trial_2 = trial_wave(R_1,R_2,dims,alpha);
+    double trial_1 = f(r_1,r_2,dims,alpha);
+    double trial_2 = f(R_1,R_2,dims,alpha);
 
     trial_1 = abs(trial_1);
     trial_2 = abs(trial_2);
 
     return trial_1/trial_2;
 }
->>>>>>> Stashed changes
 
 double trial_wave(double* r_1, double* r_2, int dims, double alpha)
 {
@@ -150,4 +144,33 @@ void array_scalar(double* arr_out, double* arr , int N , double scalar)
 {
     for (int i = 0; i < N; i++)
         arr_out[i]=arr[i]* scalar;
+}
+
+
+double  montecarles(int N, double(*f), int dims)
+{
+    double r_1[dims];
+    double r_2[dims];
+    new_configuration(r_1,r_2, dims);
+
+    double* energy = malloc(sizeof(double)*N);
+
+    double delta = 0.5;
+
+    for (int i = 0; i < N; i++)
+    {
+        double r_1_new[dims];
+        double r_2_new[dims];
+        double r;
+        for (int d = 0; d < dims; d++)
+        {
+            r=randq();
+            r_1_new[d] = r_1[d]+delta*(r-0.5);
+            r=randq();
+            r_2_new[d] = r_2[d]+delta*(r-0.5);
+        }
+
+        double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,);
+
+    }
 }
