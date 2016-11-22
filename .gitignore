@@ -5,12 +5,12 @@
 *.obj
 
 # Executables
-*.exe
+*.exe*
 *.out
 *.app
 
-MD # explicitly ignoring the MD executable on linux systems
-code/*/MD
+run # explicitly ignoring the MD executable on linux systems
+code/*/run
 
 # Data files
 *.dat
@@ -22,6 +22,7 @@ code/*/MD
 report/*.aux
 report/*.log
 report/*.gz
+*.stackdump
 
 # Tikz files in code
 code/*.tikz
