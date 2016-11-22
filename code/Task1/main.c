@@ -181,7 +181,7 @@ double  montecarlo(int N, double (*f)(double*,double*,int,double), double alpha)
 
         /*
         double r;
-        for (int d = 0; d < dims; d++)
+        for (int d = 0; d < nbr_of_dimensions; d++)
         {
             r=randq();
             r_1_new[d] = r_1[d]+delta*(r-0.5);
@@ -189,6 +189,7 @@ double  montecarlo(int N, double (*f)(double*,double*,int,double), double alpha)
             r_2_new[d] = r_2[d]+delta*(r-0.5);
         }
         */
+        
 
         double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f);
 
