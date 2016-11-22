@@ -20,6 +20,7 @@ void    array_scalar(double*,double*, int, double);
 double  montecarlo(int N, double(), int, double);
 double  relative_probability(double*, double* ,double* , double* , int , double , double ());
 double  mean(double*, int);
+double  density_probability(double,double);
 
 // MAIN PROGRAM
 // ------------------------------------------------------------------
@@ -204,4 +205,11 @@ double mean(double* arr, int N)
     for (int i = 0; i < N; i++)
         sum += arr[i];
     return sum/(double)(N);
+}
+
+
+double density_probability(double r, double Z)
+{
+    double prob=pow(z,3)*4*pow(r,2)*exp(-2*Z*r);
+    return prob;
 }
