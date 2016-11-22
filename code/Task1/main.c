@@ -44,7 +44,7 @@ int main()
     e4pi    = 1;
     alpha   = 0.1;
 
-    double monte = montecarles(1000000, trial_wave, nbr_of_dimensions, alpha);
+    double monte = montecarles(10000000, trial_wave, nbr_of_dimensions, alpha);
 
     printf("%e \n", monte );
 
@@ -119,6 +119,9 @@ double local_energy(double* r_1, double* r_2, int dims, double alpha)
     double energy = 0;
     energy = -4 +term1+term2+term3+term4;
 
+    free(unit_1);
+    free(unit_2);
+
     return energy;
 }
 
@@ -188,7 +191,10 @@ double  montecarles(int N, double (*f)(double*,double*,int,double), int dims, do
 
     int equilibrium_time= N/10;
 
-    return mean(&energy[equilibrium_time],N-equilibrium_time);
+    double mean_energy =mean(&energy[equilibrium_time],N-equilibrium_time);
+
+    free (energy);
+    return mean_energy;
 }
 
 double mean(double* arr, int N)
