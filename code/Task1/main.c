@@ -17,9 +17,9 @@ double  local_energy(double*, double*, int, double);
 double  array_mult(double*, double*, int);
 void    new_configuration(double *, double*, int);
 void    array_scalar(double*,double*, int, double);
-double  montecarles(int N, double(), int);
-double  relative_probability(double*, double* ,double* , double* , int , double , double (*f)())
-
+double  montecarles(int N, double(), int, double);
+double  relative_probability(double*, double* ,double* , double* , int , double , double ());
+double  mean(double*, int);
 
 // MAIN PROGRAM
 // ------------------------------------------------------------------
@@ -44,8 +44,9 @@ int main()
     e4pi    = 1;
     alpha   = 0.1;
 
+    double monte = montecarles(1000000, trial_wave, nbr_of_dimensions, alpha);
 
-
+    printf("%e \n", monte );
 
     // Free the gsl random number generator
     Free_Generator();
@@ -147,7 +148,7 @@ void array_scalar(double* arr_out, double* arr , int N , double scalar)
 }
 
 
-double  montecarles(int N, double(*f), int dims)
+double  montecarles(int N, double (*f)(double*,double*,int,double), int dims, double alpha)
 {
     double r_1[dims];
     double r_2[dims];
@@ -170,7 +171,30 @@ double  montecarles(int N, double(*f), int dims)
             r_2_new[d] = r_2[d]+delta*(r-0.5);
         }
 
-        double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,);
+        double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,dims,alpha,f);
 
+        r = randq();
+        if (relative_prob > r)
+        {
+            for (int d = 0; d < dims; d++)
+            {
+                r_1[d] = r_1_new[d];
+                r_2[d] = r_2_new[d];
+            }
+        }
+
+        energy[i] = local_energy(r_1,r_2,dims,alpha);
     }
+
+    int equilibrium_time= N/10;
+
+    return mean(&energy[equilibrium_time],N-equilibrium_time);
+}
+
+double mean(double* arr, int N)
+{
+    double sum =0;
+    for (int i = 0; i < N; i++)
+        sum += arr[i];
+    return sum/(double)(N);
 }
