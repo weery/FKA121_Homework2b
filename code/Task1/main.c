@@ -209,7 +209,12 @@ double  montecarlo(int N, double (*f)(double*,double*,int,double), double alpha)
         energy[i] = local_energy(r_1,r_2,alpha);
     }
 
+<<<<<<< Updated upstream
     int equilibrium_time = N/10;
+=======
+    // Remove the first tenth of the simulation as equilibrium state
+    int equilibrium_time= N/10;
+>>>>>>> Stashed changes
 
     double mean_energy =mean(&energy[equilibrium_time],N-equilibrium_time);
 
@@ -225,9 +230,80 @@ double mean(double* arr, int N)
     return sum/(double)(N);
 }
 
-
 double density_probability(double r, double Z)
 {
     double prob=pow(Z,3)*4*pow(r,2)*exp(-2*Z*r);
     return prob;
+}
+
+
+// Methods that are to be in  Task 2
+double var(double* arr, int N)
+{
+    double var = 0;
+    double mean = mean(arr,N);
+    for (int i = 0; i < N; i++)
+        var += (arr[i]-mean)*(arr[i]-mean);
+    var /= (double) N;
+
+    return var;
+}
+
+
+
+
+// Calcultes the correlation length of the data
+double auto_correlation(double* data, int N)
+{
+    double decay_value = exp(-2);
+    double current_decay = 1;
+    int k = 0;
+    while (1)
+    {
+        current_decay = calc_auto_corr(data, N, ++k);
+        if (current_decay < decay_value)
+            break;
+    }
+    return k;
+}
+
+
+// Calculates the auto correlation with a given k - correlation length
+double calc_auto_corr(double* data, int N, int k)
+{
+    double mean = calc_mean(data,N);
+    double var = calc_var(data,N);
+
+    double corr = 0;
+    for (int i = 0; i < N-k;i++)
+    {
+        corr += data[i]*data[i+k];
+    }
+    corr/= (double)(N-k);
+    return (corr-mean*mean)/var;
+}
+
+double variance_block(double* data, int N, int B)
+{
+    int n_blocks=floor(N/B);
+    double* block = malloc((n_blocks)*sizeof(double));
+
+    for (int i = 0; i < n_blocks; i++)
+        block[i] = mean(data+(i*B),B);
+
+    double var = 0;
+
+    var = calc_var(block,n_blocks);
+
+    free (block);
+
+    return var;
+}
+
+double block_correlation(double* data, int N, int B)
+{
+    double block_var = variance_block(data,N,B);
+    double var = var(data,N);
+    double s = (double)(B)*block_var/var;
+    return s;
 }
