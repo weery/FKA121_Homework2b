@@ -1,10 +1,3 @@
-/*
-HOMEPROBLEM - TASK 1
-MD_main.c
-
-Created by Anders Lindman on 2013-10-31.
-*/
-
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -66,6 +59,17 @@ int main()
 
 // HELPER FUNCTION DEFINITIONS
 // ------------------------------------------------------------------
+double relative_probability(double* r_1, double* r_2,double* R_1, double* R_2, int dims, double alpha)
+{
+    double trial_1 = trial_wave(r_1,r_2,dims,alpha);
+    double trial_2 = trial_wave(R_1,R_2,dims,alpha);
+
+    trial_1 = abs(trial_1);
+    trial_2 = abs(trial_2);
+
+    return trial_1/trial_2;
+}
+>>>>>>> Stashed changes
 
 double trial_wave(double* r_1, double* r_2, int dims, double alpha)
 {
