@@ -52,9 +52,11 @@ int main()
 
     new_configuration(r_1,r_2, nbr_of_dimensions);
 
+    double trial = trial_wave(r_1,r_2,nbr_of_dimensions,alpha);
 
+    double energy = local_energy(r_1,r_2,nbr_of_dimensions,alpha);
 
-
+    printf("%e \t %e \n", trial,energy);
     // Free the gsl random number generator
     Free_Generator();
     return 0;
