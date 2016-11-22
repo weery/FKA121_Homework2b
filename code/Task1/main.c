@@ -1,31 +1,33 @@
 /*
- MD_main.c
+HOMEPROBLEM - TASK 1
+MD_main.c
 
- Created by Anders Lindman on 2013-10-31.
- */
+Created by Anders Lindman on 2013-10-31.
+*/
 
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
 #include "rng_gen.h"
+
+// DEFINES
 #define nbr_of_dimensions 3
 
-double trial_wave(double*, double*, int, double);
 
-double array_abs(double*, int);
+// HELPER FUNCTION DECLARATIONS
+ // -----------------------------------------------------------------
+double  trial_wave(double*, double*, int, double);
+double  array_abs(double*, int);
+void    array_diff(double*, double*, int, double*);
+double  local_energy(double*, double*, int, double);
+double  array_mult(double*, double*, int);
+void    new_configuration(double *, double*, int);
+void    array_scalar(double*,double*, int, double);
 
-void array_diff(double*, double*, int, double*);
 
-double local_energy(double*, double*, int, double);
-
-double array_mult(double*, double*, int);
-
-void new_configuration(double *, double*, int);
-
-void array_scalar(double*,double*, int, double);
-
-/* Main program */
+// MAIN PROGRAM
+// ------------------------------------------------------------------
 int main()
 {
     // Initialize the gsl random number generator
@@ -61,6 +63,9 @@ int main()
     Free_Generator();
     return 0;
 }
+
+// HELPER FUNCTION DEFINITIONS
+// ------------------------------------------------------------------
 
 double trial_wave(double* r_1, double* r_2, int dims, double alpha)
 {
