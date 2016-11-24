@@ -35,5 +35,4 @@ $(PROGRAM): $(OBJECTS)
 #
 clean:
 	rm -f *.o
-	rm -f ../*.o  # Removes .o files in previous folder
 	touch *.c
