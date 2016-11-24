@@ -19,10 +19,12 @@ double  local_energy(double*, double*, double);
 double  array_mult(double*, double*);
 void    new_configuration(double *, double*);
 void    array_scalar(double*,double*, double);
-double  montecarlo(int N, double(), double);
+double  montecarlo(int N, double(), double, double*);
 double  relative_probability(double*, double* ,double* , double*, double , double ());
-double  mean(double*, int);
+double  calc_mean(double*, int);
+double  calc_var(double*, int);
 double  density_probability(double,double);
+double calc_auto_corr(double* , int , int );
 
 // MAIN PROGRAM
 // ------------------------------------------------------------------
@@ -39,6 +41,10 @@ int main()
     double alpha;
 
 
+    int nbr_of_trials=1000000;
+    double* rads = (double*)malloc(nbr_of_trials*2*sizeof(double));
+
+
 
     // Initialize Variables
     h_bar   = 1;
@@ -47,11 +53,17 @@ int main()
     e4pi    = 1;
     alpha   = 0.1;
 
-    double monte = montecarlo(1000000, trial_wave, alpha);
-
+    double monte = montecarlo(nbr_of_trials, trial_wave, alpha,rads);
 
     printf("%e \n", monte );
 
+    FILE* file;
+    file = fopen("rads.dat","w");
+    for (int i = 0; i < nbr_of_trials; i++)
+    {
+        fprintf(file, "%e\n", rads[i] );
+    }
+    fclose(file);
     // Free the gsl random number generator
     Free_Generator();
     return 0;
@@ -63,9 +75,6 @@ double relative_probability(double* r_1, double* r_2,double* R_1, double* R_2, d
 {
     double trial_1 = f(r_1,r_2,nbr_of_dimensions,alpha);
     double trial_2 = f(R_1,R_2,nbr_of_dimensions,alpha);
-
-    trial_1 = abs(trial_1);
-    trial_2 = abs(trial_2);
 
     return trial_1/trial_2;
 }
@@ -140,12 +149,13 @@ double array_mult(double* arr_1, double* arr_2)
 
 void new_configuration(double * r_1, double* r_2)
 {
-    int idx = (int)(nbr_of_dimensions*randq() + 0.5);
-    int r = randq();
-
-    r_1[idx] += d_param * r;
-    r_2[idx] -= d_param * r;
-
+    for (int i = 0; i < nbr_of_dimensions; i++)
+    {
+        double r1 = randq()-0.5;
+        double r2 = randq()-0.5;
+        r_1[i] += d_param * r1;
+        r_2[i] += d_param * r2;
+    }
 }
 
 
@@ -156,11 +166,13 @@ void array_scalar(double* arr_out, double* arr, double scalar)
 }
 
 
-double  montecarlo(int N, double (*f)(double*,double*,int,double), double alpha)
+double  montecarlo(int N, double (*f)(double*,double*,int,double), double alpha, double* rads)
 {
     double r_1[nbr_of_dimensions];
     double r_2[nbr_of_dimensions];
-    new_configuration(r_1,r_2);
+
+    r_1[1]=0.1;
+    r_2[1]=-0.1;
 
     double* energy = malloc(sizeof(double)*N);
 
@@ -179,18 +191,6 @@ double  montecarlo(int N, double (*f)(double*,double*,int,double), double alpha)
         new_configuration(r_1_new, r_2_new);
 
 
-        /*
-        double r;
-        for (int d = 0; d < nbr_of_dimensions; d++)
-        {
-            r=randq();
-            r_1_new[d] = r_1[d]+delta*(r-0.5);
-            r=randq();
-            r_2_new[d] = r_2[d]+delta*(r-0.5);
-        }
-        */
-        
-
         double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f);
 
         double r = randq();
@@ -198,32 +198,23 @@ double  montecarlo(int N, double (*f)(double*,double*,int,double), double alpha)
         {
             memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
             memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
-            /*
-            for (int d = 0; d < dims; d++)
-            {
-                r_1[d] = r_1_new[d];
-                r_2[d] = r_2_new[d];
-            }
-            */
         }
-
+        rads[2*i]=array_abs(r_1);
+        rads[2*i+1]=array_abs(r_2);
         energy[i] = local_energy(r_1,r_2,alpha);
     }
 
-<<<<<<< Updated upstream
-    int equilibrium_time = N/10;
-=======
     // Remove the first tenth of the simulation as equilibrium state
     int equilibrium_time= N/10;
->>>>>>> Stashed changes
 
-    double mean_energy =mean(&energy[equilibrium_time],N-equilibrium_time);
+
+    double mean_energy =calc_mean(&energy[equilibrium_time],N-equilibrium_time);
 
     free (energy);
     return mean_energy;
 }
 
-double mean(double* arr, int N)
+double calc_mean(double* arr, int N)
 {
     double sum =0;
     for (int i = 0; i < N; i++)
@@ -239,10 +230,10 @@ double density_probability(double r, double Z)
 
 
 // Methods that are to be in  Task 2
-double var(double* arr, int N)
+double calc_var(double* arr, int N)
 {
     double var = 0;
-    double mean = mean(arr,N);
+    double mean = calc_mean(arr,N);
     for (int i = 0; i < N; i++)
         var += (arr[i]-mean)*(arr[i]-mean);
     var /= (double) N;
@@ -290,7 +281,7 @@ double variance_block(double* data, int N, int B)
     double* block = malloc((n_blocks)*sizeof(double));
 
     for (int i = 0; i < n_blocks; i++)
-        block[i] = mean(data+(i*B),B);
+        block[i] = calc_mean(data+(i*B),B);
 
     double var = 0;
 
@@ -304,7 +295,7 @@ double variance_block(double* data, int N, int B)
 double block_correlation(double* data, int N, int B)
 {
     double block_var = variance_block(data,N,B);
-    double var = var(data,N);
+    double var = calc_var(data,N);
     double s = (double)(B)*block_var/var;
     return s;
 }
