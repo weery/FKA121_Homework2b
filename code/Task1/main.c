@@ -7,7 +7,7 @@
 #include "../helper.h"
 
 // DEFINES
-#define d_param 0.001
+#define d_param 2.0
 #define nbr_of_dimensions 3
 
 
@@ -129,6 +129,7 @@ double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(
 {
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
+    int rejects = 0;
 
     r_1[1]=0.1;
     r_2[1]=-0.1;
@@ -158,6 +159,9 @@ double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(
             memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
             memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
         }
+        else
+            rejects++;
+
         rads[2*i]=array_abs(r_1,nbr_of_dimensions);
         rads[2*i+1]=array_abs(r_2,nbr_of_dimensions);
         double s_1[3];
@@ -174,6 +178,9 @@ double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(
     double mean_energy =calc_mean(&energy[equilibrium_time],N-equilibrium_time);
 
     free (energy);
+
+    printf("Estimated rejection prob. : %f\n", (double)rejects/N);
+
     return mean_energy;
 }
 
