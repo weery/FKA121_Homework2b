@@ -24,6 +24,7 @@ double relative_probability(double* r_1, double* r_2,double* R_1, double* R_2, d
 {
     double trial_1 = f(r_1,r_2,nbr_of_dimensions,alpha);
     double trial_2 = f(R_1,R_2,nbr_of_dimensions,alpha);
+    
     return trial_1/trial_2;
 }
 

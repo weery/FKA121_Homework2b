@@ -26,3 +26,6 @@ report/*.gz
 
 # Tikz files in code
 code/*.tikz
+
+# Matlab
+*.asv

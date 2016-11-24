@@ -51,7 +51,7 @@ int main()
 
     FILE* file;
     file = fopen("rads.dat","w");
-    for (int i = 0; i < nbr_of_trials; i++)
+    for (int i = 0; i < 2*nbr_of_trials; i++)
     {
         fprintf(file, "%e\n", rads[i] );
     }
@@ -78,7 +78,8 @@ double trial_wave(double* r_1, double* r_2, double alpha)
     array_diff(r_1,r_2,r_12, nbr_of_dimensions);
     double r12 = array_abs(r_12,nbr_of_dimensions);
 
-    double f_val = exp(-2*r1)*exp(-2*r2)*exp(r12/(2*(1+alpha*r12)));
+
+    double f_val = exp(-2*r1) * exp(-2*r2) * exp(r12/(2.0*(1.0+alpha*r12)));
 
     return f_val;
 }
@@ -126,15 +127,14 @@ void new_configuration(double * r_1, double* r_2)
 
 double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(double*,double*,int,double), double alpha, double* rads, double* angle_diff)
 {
-    double r_1[nbr_of_dimensions];
-    double r_2[nbr_of_dimensions];
+    double r_1[nbr_of_dimensions] = { 0 };
+    double r_2[nbr_of_dimensions] = { 0 };
 
     r_1[1]=0.1;
     r_2[1]=-0.1;
 
     double* energy = malloc(sizeof(double)*N);
 
-    double delta = 0.5;
 
     for (int i = 0; i < N; i++)
     {
@@ -150,6 +150,7 @@ double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(
 
 
         double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f,nbr_of_dimensions);
+
 
         double r = randq();
         if (relative_prob > r)
