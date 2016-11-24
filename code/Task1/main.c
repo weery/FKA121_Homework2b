@@ -7,6 +7,7 @@
 #include "../helper.h"
 
 // DEFINES
+
 #define d_param 2.0
 #define nbr_of_dimensions 3
 
@@ -33,7 +34,7 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials   =   10000000;
+    int nbr_of_trials   =   100000000;
 
     double* rads        =   (double*)malloc(nbr_of_trials*2*sizeof(double));
     double* angle_diff  =   (double*)malloc(nbr_of_trials*sizeof(double));

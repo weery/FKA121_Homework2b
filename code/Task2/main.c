@@ -7,7 +7,7 @@
 #include "../helper.h"
 
 // DEFINES
-#define d_param 0.0001
+#define d_param 0.00001
 #define nbr_of_dimensions 3
 
 
@@ -121,14 +121,11 @@ void new_configuration(double * r_1, double* r_2)
 
 double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(double*,double*,int,double), double alpha, double* energy)
 {
-    double r_1[nbr_of_dimensions];
-    double r_2[nbr_of_dimensions];
+    double r_1[nbr_of_dimensions] = { 0 };
+    double r_2[nbr_of_dimensions] = { 0 };
 
     r_1[1]=0.1;
     r_2[1]=-0.1;
-
-
-    double delta = 0.5;
 
     for (int i = 0; i < N; i++)
     {
