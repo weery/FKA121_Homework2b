@@ -1,5 +1,8 @@
 clear all, close all, clc
 
-energies=importdata('Energy.dat');
+energies=importdata('energy.dat');
 
-plot(energies)
+x=(1:length(energies))';
+mean = cumsum(energies)./x;
+
+plot(mean)

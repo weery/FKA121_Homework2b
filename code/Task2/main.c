@@ -7,7 +7,7 @@
 #include "../helper.h"
 
 // DEFINES
-#define d_param 0.00001
+#define d_param 2.0
 #define nbr_of_dimensions 3
 
 
@@ -16,7 +16,7 @@
 double  trial_wave(double*, double*, double);
 double  local_energy(double*, double*, double);
 void    new_configuration(double *, double*);
-double  montecarlo(int N,double(), double(), double, double*);
+void    montecarlo(int N,double(), double(), double, double*);
 double  density_probability(double,double);
 
 // MAIN PROGRAM
@@ -33,7 +33,7 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials     =   100000000;
+    int nbr_of_trials     =   1000000;
 
     double* energy        =   (double*)malloc(nbr_of_trials*sizeof(double));
 
@@ -51,8 +51,7 @@ int main()
     file = fopen("energy.dat","w");
     for (int i = 0; i < nbr_of_trials; i++)
     {
-        if (i % 1000 == 0)
-            fprintf(file, "%e\n", energy[i] );
+        fprintf(file, "%e\n", energy[i] );
     }
     fclose(file);
 
@@ -71,7 +70,7 @@ double trial_wave(double* r_1, double* r_2, double alpha)
     array_diff(r_1,r_2,r_12, nbr_of_dimensions);
     double r12 = array_abs(r_12,nbr_of_dimensions);
 
-    double f_val = exp(-2*r1)*exp(-2*r2)*exp(r12/(2*(1+alpha*r12)));
+    double f_val = exp(-2*r1) * exp(-2*r2) * exp(r12/(2*(1+alpha*r12)));
 
     return f_val;
 }
@@ -107,22 +106,19 @@ double local_energy(double* r_1, double* r_2, double alpha)
 
 void new_configuration(double * r_1, double* r_2)
 {
-    int idx = randint(0,5);
-    if (idx >2)
+    for (int i = 0; i < nbr_of_dimensions; i++)
     {
-        r_1[idx]+= randq()-0.5;
-    }
-    else
-    {
-        r_2[idx-3]+= randq()-0.5;
+        r_1[i]+= d_param*(randq()-0.5);
+        r_2[i]+= d_param*(randq()-0.5);
     }
 }
 
 
-double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(double*,double*,int,double), double alpha, double* energy)
+void  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(double*,double*,int,double), double alpha, double* energy)
 {
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
+    int rejects = 0;
 
     r_1[1]=0.1;
     r_2[1]=-0.1;
@@ -147,10 +143,13 @@ double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(
         {
             memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
             memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
-        }
+        } else
+            rejects++;
 
         energy[i] = local_e(r_1,r_2,alpha);
     }
+
+    printf("Estimated rejection prob. : %f\n", (double)rejects/N);
 }
 
 double density_probability(double r, double Z)
