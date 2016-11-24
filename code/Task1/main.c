@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include "rng_gen.h"
+#include "../rng_gen.h"
 #include "../helper.h"
 
 // DEFINES

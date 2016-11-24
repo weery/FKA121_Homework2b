@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include "rng_gen.h"
+#include "../rng_gen.h"
 #include "../helper.h"
 
 // DEFINES
-#define d_param 0.001
+#define d_param 0.0001
 #define nbr_of_dimensions 3
 
 
@@ -33,7 +33,7 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials   =   10000000;
+    int nbr_of_trials     =   100000000;
 
     double* energy        =   (double*)malloc(nbr_of_trials*sizeof(double));
 
@@ -51,7 +51,8 @@ int main()
     file = fopen("energy.dat","w");
     for (int i = 0; i < nbr_of_trials; i++)
     {
-        fprintf(file, "%e\n", energy[i] );
+        if (i % 1000 == 0)
+            fprintf(file, "%e\n", energy[i] );
     }
     fclose(file);
 
@@ -106,12 +107,14 @@ double local_energy(double* r_1, double* r_2, double alpha)
 
 void new_configuration(double * r_1, double* r_2)
 {
-    for (int i = 0; i < nbr_of_dimensions; i++)
+    int idx = randint(0,5);
+    if (idx >2)
     {
-        double r1 = randq()-0.5;
-        double r2 = randq()-0.5;
-        r_1[i] += d_param * r1;
-        r_2[i] += d_param * r2;
+        r_1[idx]+= randq()-0.5;
+    }
+    else
+    {
+        r_2[idx-3]+= randq()-0.5;
     }
 }
 

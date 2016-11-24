@@ -5,7 +5,7 @@ CC = gcc # c-compiler
 CFLAGS = -O3 -W # -O3 gives optimization, -W gives warnings
 LIBS = -lm -lgsl -lgslcblas # libraries
 
-OBJECTS = ../helper.o main.o rng_gen.o # object files to produce
+OBJECTS = ../helper.o main.o ../rng_gen.o # object files to produce
 PROGRAM = run # name of executable to be built
 
 #
@@ -35,4 +35,5 @@ $(PROGRAM): $(OBJECTS)
 #
 clean:
 	rm -f *.o
+	rm -f ../*.o  # Removes .o files in previous folder
 	touch *.c
