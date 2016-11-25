@@ -16,7 +16,7 @@
 double  trial_wave(double*, double*, double);
 double  local_energy(double*, double*, double);
 void    new_configuration(double *, double*);
-void    montecarlo(int N,double(), double(), double, double*);
+void    montecarlo(int, double(), double(), double, double*);
 double  density_probability(double,double);
 
 // MAIN PROGRAM
@@ -33,10 +33,13 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials     =   1000000;
+    int nbr_of_trials       =   100000;
+    int nbr_of_block_trials =   1000;
 
-    double* energy        =   (double*)malloc(nbr_of_trials*sizeof(double));
 
+
+    double* energy          =   (double*)malloc(nbr_of_trials*sizeof(double));
+    double* block_error_estimate = (double*)malloc(nbr_of_block_trials*sizeof(double));
 
     // Initialize Variables
     h_bar   = 1;
@@ -45,7 +48,19 @@ int main()
     e4pi    = 1;
     alpha   = 0.1;
 
+    printf("Start Monte Carlo simulation\n");
+
     montecarlo(nbr_of_trials,local_energy, trial_wave, alpha,energy);
+
+    printf("Monte Carlo simulaton done\n\n");
+
+    int nbr_of_trials_eq    =   15000;
+
+    block_error_estimates(&energy[nbr_of_trials_eq], block_error_estimate, nbr_of_trials-nbr_of_trials_eq, nbr_of_block_trials);
+
+    double s2= auto_correlation(&energy[nbr_of_trials_eq],nbr_of_trials-nbr_of_trials_eq);
+
+    printf("%.f\n", s2 );
 
     FILE* file;
     file = fopen("energy.dat","w");
@@ -55,6 +70,12 @@ int main()
     }
     fclose(file);
 
+    file = fopen("block_length.dat","w");
+    for (int i = 0; i < nbr_of_block_trials; i++)
+    {
+        fprintf(file, "%e\n", block_error_estimate[i] );
+    }
+    fclose(file);
     // Free the gsl random number generator
     Free_Generator();
     return 0;

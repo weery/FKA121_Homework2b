@@ -1,5 +1,6 @@
 #include <math.h>
-#include <stdlib.h> 
+#include <stdio.h>
+#include <stdlib.h>
 #include "./helper.h"
 
 void to_spherical(double* r, double* s)
@@ -24,7 +25,7 @@ double relative_probability(double* r_1, double* r_2,double* R_1, double* R_2, d
 {
     double trial_1 = f(r_1,r_2,nbr_of_dimensions,alpha);
     double trial_2 = f(R_1,R_2,nbr_of_dimensions,alpha);
-    
+
     return trial_1/trial_2;
 }
 
@@ -101,6 +102,15 @@ double calc_auto_corr(double* data, int N, int k)
     }
     corr/= (double)(N-k);
     return (corr-mean*mean)/var;
+}
+
+void block_error_estimates(double* data, double* block_error, int N, int b_max)
+{
+    for (int i = 1; i < b_max; i++)
+    {
+        double s = block_correlation(data,N,i);
+        block_error[i]=s;
+    }
 }
 
 double variance_block(double* data, int N, int B)
