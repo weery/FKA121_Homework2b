@@ -41,14 +41,14 @@ int main()
     double alpha_min;
     double alpha_max;
 
-    int nbr_of_alpha_trials =   1000;
-    int nbr_of_trials_eq    =   15000;
-    int nbr_of_runs         =   10;
+    int nbr_of_alpha_trials =   100;
+    int nbr_of_trials_eq    =   30000;
+    int nbr_of_runs         =   100;
 
 
 
-
-    double* energy          =   (double*)malloc(nbr_of_alpha_trials*sizeof(double));
+    #define energy(i,j)  (energy_arr[j*nbr_of_alpha_trials+i])
+    double* energy_arr          =   (double*)malloc(nbr_of_alpha_trials*nbr_of_runs*sizeof(double));
 
     // Initialize Variables
     h_bar   = 1;
@@ -63,14 +63,13 @@ int main()
 
     for (int i = 0; i < nbr_of_alpha_trials; i++)
     {
-        alpha = alpha_min+(alpha_max-alpha_min)*(double)(i)/(double)(nbr_of_alpha_trials);
+        alpha = alpha_min+(alpha_max-alpha_min)*(double)(i)/(double)(nbr_of_alpha_trials-1);
         double en=0;
         for (int j = 0; j < nbr_of_runs; j++)
         {
-            en += montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha);
+            double current_energy = montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha);
+            energy(j,i)= current_energy;
         }
-        energy[i]=en/nbr_of_runs;
-        printf("%i\n",i );
     }
 
     FILE* file;
@@ -78,11 +77,17 @@ int main()
     file = fopen("alpha_avg_energy.dat","w");
     for (int i = 0; i < nbr_of_alpha_trials; i++)
     {
-        alpha = alpha_min+(alpha_max-alpha_min)*(double)(i)/(double)(nbr_of_alpha_trials);
-        fprintf(file,"%e \t %e \n", alpha, energy[i]);
+        alpha = alpha_min+(alpha_max-alpha_min)*(double)(i)/(double)(nbr_of_alpha_trials-1);
+        fprintf(file, "%e\t", alpha);
+        for (int j = 0; j < nbr_of_runs; j++)
+        {
+            fprintf(file,"%e \t", energy(j,i) );
+        }
+        fprintf(file, "\n");
     }
     fclose(file);
 
+    free(energy_arr);
     // Free the gsl random number generator
     Free_Generator();
     return 0;
@@ -147,7 +152,7 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
 
-    double* energy = malloc(sizeof(double)*N);
+    double* energy = malloc(sizeof(double)*(N-equilibrium_time));
 
 
     for (int i = 0; i < N; i++)
@@ -172,13 +177,13 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
             memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
             memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
         }
-
-        energy[i] = local_e(r_1,r_2,alpha);
+        if (i >= equilibrium_time)
+            energy[i-equilibrium_time] = local_e(r_1,r_2,alpha);
     }
-    // Remove the first tenth of the simulation as equilibrium state
 
 
-    double mean_energy =calc_mean(&energy[equilibrium_time],N-equilibrium_time);
+
+    double mean_energy =calc_mean(energy,N-equilibrium_time);
 
     free (energy);
 

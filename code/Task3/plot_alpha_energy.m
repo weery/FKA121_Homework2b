@@ -2,9 +2,9 @@ clear all, close all, clc
 
 alpha_energy=importdata('alpha_avg_energy.dat');
 
-plot(alpha_energy(:,1),alpha_energy(:,2))
+plot(alpha_energy(:,1),mean(alpha_energy(:,2:end),2))
 
-ylabel('Statistical inefficiency','interpreter','latex')
-xlabel('Block Length [$\#$]','interpreter','latex')
-title('Estimate statistical inefficiency $s$ using blocks','interpreter','latex')
+ylabel('Energy [$\#$]','interpreter','latex')
+xlabel('$\alpha$ [$\#$]','interpreter','latex')
+title('Estimation of lowest energy','interpreter','latex')
 
