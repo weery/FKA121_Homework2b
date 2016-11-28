@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "./helper.h"
 
+// r phi theta
 void to_spherical(double* r, double* s)
 {
     s[0] = array_abs(r,3);
@@ -25,6 +26,10 @@ double relative_probability(double* r_1, double* r_2,double* R_1, double* R_2, d
 {
     double trial_1 = f(r_1,r_2,nbr_of_dimensions,alpha);
     double trial_2 = f(R_1,R_2,nbr_of_dimensions,alpha);
+
+    trial_1 = trial_1*trial_1;
+
+    trial_2 = trial_2*trial_2;
 
     return trial_1/trial_2;
 }

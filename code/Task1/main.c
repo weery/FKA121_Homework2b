@@ -8,7 +8,7 @@
 
 // DEFINES
 
-#define d_param 2.0
+#define d_param 0.6
 #define nbr_of_dimensions 3
 
 
@@ -34,7 +34,7 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials   =   100000000;
+    int nbr_of_trials   =   10000000;
 
     double* rads        =   (double*)malloc(nbr_of_trials*2*sizeof(double));
     double* angle_diff  =   (double*)malloc(nbr_of_trials*sizeof(double));
@@ -52,14 +52,14 @@ int main()
 
     FILE* file;
     file = fopen("rads.dat","w");
-    for (int i = 0; i < 2*nbr_of_trials; i++)
+    for (int i = 0; i < 2*(nbr_of_trials/10); i++)
     {
         fprintf(file, "%e\n", rads[i] );
     }
     fclose(file);
 
     file = fopen("angle_diff.dat","w");
-    for (int i = 0; i < nbr_of_trials; i++)
+    for (int i = 0; i < nbr_of_trials/10; i++)
     {
         fprintf(file, "%e\n", angle_diff[i] );
     }
@@ -132,11 +132,16 @@ double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(
     double r_2[nbr_of_dimensions] = { 0 };
     int rejects = 0;
 
-    r_1[1]=0.1;
-    r_2[1]=-0.1;
+    r_1[1]=1;
+    r_1[2]=0;
+    r_1[3]=0;
+    r_2[1]=-1;
+    r_2[2]=0;
+    r_2[3]=0;
 
     double* energy = malloc(sizeof(double)*N);
 
+    int equilibrium_time= N/10;
 
     for (int i = 0; i < N; i++)
     {
@@ -163,17 +168,20 @@ double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(
         else
             rejects++;
 
-        rads[2*i]=array_abs(r_1,nbr_of_dimensions);
-        rads[2*i+1]=array_abs(r_2,nbr_of_dimensions);
-        double s_1[3];
-        double s_2[3];
-        to_spherical(r_1,s_1);
-        to_spherical(r_2,s_2);
-        angle_diff[i]=fabs(s_2[1]-s_1[1]);
+        if (i > equilibrium_time)
+        {
+            rads[2*(i-equilibrium_time)]=array_abs(r_1,nbr_of_dimensions);
+            rads[2*(i-equilibrium_time)+1]=array_abs(r_2,nbr_of_dimensions);
+            double s_1[3];
+            double s_2[3];
+            to_spherical(r_1,s_1);
+            to_spherical(r_2,s_2);
+            angle_diff[i]=fabs(s_2[2]-s_1[2]);
+        }
         energy[i] = local_e(r_1,r_2,alpha);
     }
     // Remove the first tenth of the simulation as equilibrium state
-    int equilibrium_time= N/10;
+
 
 
     double mean_energy =calc_mean(&energy[equilibrium_time],N-equilibrium_time);

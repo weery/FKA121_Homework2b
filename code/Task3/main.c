@@ -7,7 +7,7 @@
 #include "../helper.h"
 
 // DEFINES
-#define d_param 2.0
+#define d_param 0.1
 #define nbr_of_dimensions 3
 
 
