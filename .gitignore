@@ -16,7 +16,7 @@ code/*/run
 *.dat
 
 # Figures
-#*.pdf
+*.pdf
 
 # Misc. report stuff
 report/*.aux

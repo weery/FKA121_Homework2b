@@ -18,5 +18,6 @@ double auto_correlation(double*, int);
 void print_list(double*, int);
 double step_length(double,int,double);
 double gradient_alpha(double*,double*,double,int);
+double calc_alpha_exp(double, double, double);
 
 #endif
