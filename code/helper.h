@@ -15,5 +15,8 @@ void block_error_estimates(double*, double*, int, int);
 double block_correlation(double*, int, int);
 double variance_block(double*, int, int);
 double auto_correlation(double*, int);
+void print_list(double*, int);
+double step_length(double,int,double);
+double gradient_alpha(double*,double*,double,int);
 
 #endif

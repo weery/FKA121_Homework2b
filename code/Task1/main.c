@@ -8,7 +8,7 @@
 
 // DEFINES
 
-#define d_param 0.6
+#define d_param 1.0
 #define nbr_of_dimensions 3
 
 
@@ -17,7 +17,7 @@
 double  trial_wave(double*, double*, double);
 double  local_energy(double*, double*, double);
 void    new_configuration(double *, double*);
-double  montecarlo(int N,double(), double(), double, double*, double*);
+double  montecarlo(int ,int ,double(), double(), double, double*, double*);
 double  density_probability(double,double);
 
 // MAIN PROGRAM
@@ -34,10 +34,11 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials   =   10000000;
+    int nbr_of_trials       = 10000000;
+    int nbr_of_trials_eq    = nbr_of_trials/10;
 
-    double* rads        =   (double*)malloc(nbr_of_trials*2*sizeof(double));
-    double* angle_diff  =   (double*)malloc(nbr_of_trials*sizeof(double));
+    double* rads            = (double*)malloc(nbr_of_trials*2*sizeof(double));
+    double* angle_diff      = (double*)malloc(nbr_of_trials*sizeof(double));
 
     // Initialize Variables
     h_bar   = 1;
@@ -46,20 +47,20 @@ int main()
     e4pi    = 1;
     alpha   = 0.1;
 
-    double monte = montecarlo(nbr_of_trials,local_energy, trial_wave, alpha,rads,angle_diff);
+    double monte = montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha,rads,angle_diff);
 
     printf("E_0: %e \n", monte );
 
     FILE* file;
     file = fopen("rads.dat","w");
-    for (int i = 0; i < 2*(nbr_of_trials/10); i++)
+    for (int i = 0; i < 2*(nbr_of_trials-nbr_of_trials_eq); i++)
     {
         fprintf(file, "%e\n", rads[i] );
     }
     fclose(file);
 
     file = fopen("angle_diff.dat","w");
-    for (int i = 0; i < nbr_of_trials/10; i++)
+    for (int i = 0; i < nbr_of_trials-nbr_of_trials_eq; i++)
     {
         fprintf(file, "%e\n", angle_diff[i] );
     }
@@ -126,7 +127,7 @@ void new_configuration(double * r_1, double* r_2)
 }
 
 
-double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(double*,double*,int,double), double alpha, double* rads, double* angle_diff)
+double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*,double), double (*f)(double*,double*,double), double alpha, double* rads, double* angle_diff)
 {
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
@@ -139,9 +140,7 @@ double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(
     r_2[2]=0;
     r_2[3]=0;
 
-    double* energy = malloc(sizeof(double)*N);
-
-    int equilibrium_time= N/10;
+    double* energy = malloc(sizeof(double)*(N-equilibrium_time));
 
     for (int i = 0; i < N; i++)
     {
@@ -168,7 +167,7 @@ double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(
         else
             rejects++;
 
-        if (i > equilibrium_time)
+        if (i >= equilibrium_time)
         {
             rads[2*(i-equilibrium_time)]=array_abs(r_1,nbr_of_dimensions);
             rads[2*(i-equilibrium_time)+1]=array_abs(r_2,nbr_of_dimensions);
@@ -176,15 +175,14 @@ double  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(
             double s_2[3];
             to_spherical(r_1,s_1);
             to_spherical(r_2,s_2);
-            angle_diff[i]=fabs(s_2[2]-s_1[2]);
+            angle_diff[i-equilibrium_time]=fabs(s_2[2]-s_1[2]);
+            energy[i-equilibrium_time] = local_e(r_1,r_2,alpha);
         }
-        energy[i] = local_e(r_1,r_2,alpha);
     }
-    // Remove the first tenth of the simulation as equilibrium state
 
 
 
-    double mean_energy =calc_mean(&energy[equilibrium_time],N-equilibrium_time);
+    double mean_energy =calc_mean(energy,N-equilibrium_time);
 
     free (energy);
 

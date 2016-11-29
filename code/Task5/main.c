@@ -7,6 +7,7 @@
 #include "../helper.h"
 
 // DEFINES
+
 #define d_param 1.0
 #define nbr_of_dimensions 3
 
@@ -16,7 +17,7 @@
 double  trial_wave(double*, double*, double);
 double  local_energy(double*, double*, double);
 void    new_configuration(double *, double*);
-void    montecarlo(int, double(), double(), double, double*);
+double  montecarlo(int ,int ,double(), double(), double);
 double  density_probability(double,double);
 
 // MAIN PROGRAM
@@ -33,49 +34,31 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials       =   100000;
-    int nbr_of_block_trials =   1000;
+    int nbr_of_trials       = 10000000;
+    int nbr_of_trials_eq    = nbr_of_trials/10;
+    int nbr_of_runs         = 10;
 
 
-
-    double* energy                = (double*)malloc(nbr_of_trials*sizeof(double));
-    double* block_error_estimate  = (double*)malloc(nbr_of_block_trials*sizeof(double));
+    double* rads            = (double*)malloc(nbr_of_trials*2*sizeof(double));
+    double* angle_diff      = (double*)malloc(nbr_of_trials*sizeof(double));
 
     // Initialize Variables
     h_bar   = 1;
     e       = 1;
     m_e     = 1;
     e4pi    = 1;
-    alpha   = 0.1;
+    alpha   = 0.143350800000000;
 
-    printf("Start Monte Carlo simulation\n");
-
-    montecarlo(nbr_of_trials,local_energy, trial_wave, alpha,energy);
-
-    printf("Monte Carlo simulaton done\n\n");
-
-    int nbr_of_trials_eq    =   15000;
-
-    block_error_estimates(&energy[nbr_of_trials_eq], block_error_estimate, nbr_of_trials-nbr_of_trials_eq, nbr_of_block_trials);
-
-    double s2= auto_correlation(&energy[nbr_of_trials_eq],nbr_of_trials-nbr_of_trials_eq);
-
-    printf("%.f\n", s2 );
-
-    FILE* file;
-    file = fopen("energy.dat","w");
-    for (int i = 0; i < nbr_of_trials; i++)
+    double sum=0;
+    for (int i = 0; i < nbr_of_runs; i++)
     {
-        fprintf(file, "%e\n", energy[i] );
+        double monte = montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha);
+        sum+=monte;
     }
-    fclose(file);
+    sum /= nbr_of_runs;
 
-    file = fopen("block_length.dat","w");
-    for (int i = 0; i < nbr_of_block_trials; i++)
-    {
-        fprintf(file, "%e\n", block_error_estimate[i] );
-    }
-    fclose(file);
+    printf("E_0: %e \n", sum);
+
     // Free the gsl random number generator
     Free_Generator();
     return 0;
@@ -91,7 +74,8 @@ double trial_wave(double* r_1, double* r_2, double alpha)
     array_diff(r_1,r_2,r_12, nbr_of_dimensions);
     double r12 = array_abs(r_12,nbr_of_dimensions);
 
-    double f_val = exp(-2*r1) * exp(-2*r2) * exp(r12/(2*(1+alpha*r12)));
+
+    double f_val = exp(-2*r1) * exp(-2*r2) * exp(r12/(2.0*(1.0+alpha*r12)));
 
     return f_val;
 }
@@ -99,8 +83,8 @@ double trial_wave(double* r_1, double* r_2, double alpha)
 double local_energy(double* r_1, double* r_2, double alpha)
 {
     double r1 = array_abs(r_1,nbr_of_dimensions);
-    double r2 = array_abs(r_2,nbr_of_dimensions);
     double r_12[nbr_of_dimensions];
+    double r2 = array_abs(r_2,nbr_of_dimensions);
     array_diff(r_1,r_2,r_12,nbr_of_dimensions);
     double r12 = array_abs(r_12,nbr_of_dimensions);
 
@@ -129,20 +113,28 @@ void new_configuration(double * r_1, double* r_2)
 {
     for (int i = 0; i < nbr_of_dimensions; i++)
     {
-        r_1[i]+= d_param*(randq()-0.5);
-        r_2[i]+= d_param*(randq()-0.5);
+        double r1 = randq()-0.5;
+        double r2 = randq()-0.5;
+        r_1[i] += d_param * r1;
+        r_2[i] += d_param * r2;
     }
 }
 
 
-void  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(double*,double*,double), double alpha, double* energy)
+double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*,double), double (*f)(double*,double*,double), double alpha)
 {
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
     int rejects = 0;
 
-    r_1[1]=0.1;
-    r_2[1]=-0.1;
+    r_1[1]=1;
+    r_1[2]=0;
+    r_1[3]=0;
+    r_2[1]=-1;
+    r_2[2]=0;
+    r_2[3]=0;
+
+    double* energy = malloc(sizeof(double)*(N-equilibrium_time));
 
     for (int i = 0; i < N; i++)
     {
@@ -159,18 +151,31 @@ void  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(do
 
         double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f,nbr_of_dimensions);
 
+
         double r = randq();
         if (relative_prob > r)
         {
             memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
             memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
-        } else
+        }
+        else
             rejects++;
 
-        energy[i] = local_e(r_1,r_2,alpha);
+        if (i >= equilibrium_time)
+        {
+            energy[i-equilibrium_time] = local_e(r_1,r_2,alpha);
+        }
     }
 
+
+
+    double mean_energy =calc_mean(energy,N-equilibrium_time);
+
+    free (energy);
+
     printf("Estimated rejection prob. : %f\n", (double)rejects/N);
+
+    return mean_energy;
 }
 
 double density_probability(double r, double Z)

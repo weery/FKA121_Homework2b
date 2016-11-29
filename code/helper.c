@@ -22,10 +22,10 @@ double array_abs(double* vals, int nbr_of_dimensions)
     return sum;
 }
 
-double relative_probability(double* r_1, double* r_2,double* R_1, double* R_2, double alpha, double (*f)(double*,double*,int,double), int nbr_of_dimensions)
+double relative_probability(double* r_1, double* r_2,double* R_1, double* R_2, double alpha, double (*f)(double*,double*,double), int nbr_of_dimensions)
 {
-    double trial_1 = f(r_1,r_2,nbr_of_dimensions,alpha);
-    double trial_2 = f(R_1,R_2,nbr_of_dimensions,alpha);
+    double trial_1 = f(r_1,r_2,alpha);
+    double trial_2 = f(R_1,R_2,alpha);
 
     trial_1 = trial_1*trial_1;
 
@@ -52,7 +52,9 @@ double array_mult(double* arr_1, double* arr_2, int d)
 void array_scalar(double* arr_out, double* arr, double scalar, int d)
 {
     for (int i = 0; i < d; i++)
+    {
         arr_out[i]=arr[i]* scalar;
+    }
 }
 
 double calc_mean(double* arr, int N)
@@ -148,4 +150,37 @@ void to_cartesian(double* s, double* r)
     r[0]=s[0]*cos(s[1])*sin(s[2]);
     r[1]=s[0]*sin(s[1])*sin(s[2]);
     r[2]=s[0]*cos(s[2]);
+}
+
+double step_length(double A,int p, double beta)
+{
+    //printf("A: %e\t p: %i\t beta: %e\n",A,p,beta );
+    double gamma = A*pow(p,-beta);
+    return gamma;
+}
+
+
+double gradient_alpha(double* r_1,double* r_2, double alpha, int nbr_of_dimensions)
+{
+    double r1 = array_abs(r_1,nbr_of_dimensions);
+    double r_12[nbr_of_dimensions];
+    double r2 = array_abs(r_2,nbr_of_dimensions);
+    array_diff(r_1,r_2,r_12,nbr_of_dimensions);
+    double r12 = array_abs(r_12,nbr_of_dimensions);
+
+    double quotient = r12/(1+alpha*r12);
+    quotient*=quotient;
+    return -quotient/2;
+}
+
+// DEBUG TOOL
+void print_list(double* data, int N)
+{
+    for (int i = 0; i < N ; i++)
+    {
+        printf("%e\t", data[i]);
+        if (i%10==9)
+            printf("\n");
+    }
+    printf("\n");
 }

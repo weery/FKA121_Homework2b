@@ -7,7 +7,7 @@
 #include "../helper.h"
 
 // DEFINES
-#define d_param 0.1
+#define d_param 0.6
 #define nbr_of_dimensions 3
 
 
@@ -147,7 +147,7 @@ void new_configuration(double * r_1, double* r_2)
 }
 
 
-double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*,double), double (*f)(double*,double*,int,double), double alpha)
+double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*,double), double (*f)(double*,double*,double), double alpha)
 {
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
@@ -166,7 +166,6 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
         memcpy(r_2_new, r_2, nbr_of_dimensions*sizeof(double));
 
         new_configuration(r_1_new, r_2_new);
-
 
         double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f,nbr_of_dimensions);
 
