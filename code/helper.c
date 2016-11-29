@@ -184,3 +184,8 @@ void print_list(double* data, int N)
     }
     printf("\n");
 }
+
+double calc_alpha_exp(double x, double min, double max)
+{
+    return min + (max-min)*(exp(x*x)-1.0)/(exp(1.0) - 1.0);
+}
