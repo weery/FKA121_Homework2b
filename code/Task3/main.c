@@ -7,7 +7,7 @@
 #include "../helper.h"
 
 // DEFINES
-#define d_param 0.6
+#define d_param 1.0
 #define nbr_of_dimensions 3
 
 
@@ -16,7 +16,7 @@
 double  trial_wave(double*, double*, double);
 double  local_energy(double*, double*, double);
 void    new_configuration(double *, double*);
-double    montecarlo(int, int, double(), double(), double);
+double  montecarlo(int, int, double(), double(), double);
 double  density_probability(double,double);
 
 // MAIN PROGRAM
@@ -33,7 +33,6 @@ int main()
     double e4pi;
     double alpha;
 
-
     int nbr_of_trials       =   100000;
 
     // Task Specific parameters
@@ -45,21 +44,18 @@ int main()
     int nbr_of_trials_eq    =   30000;
     int nbr_of_runs         =   100;
 
-
-
     #define energy(i,j)  (energy_arr[j*nbr_of_alpha_trials+i])
     double* energy_arr          =   (double*)malloc(nbr_of_alpha_trials*nbr_of_runs*sizeof(double));
 
     // Initialize Variables
-    h_bar   = 1;
-    e       = 1;
-    m_e     = 1;
-    e4pi    = 1;
-    alpha   = 0.1;
-    s       = 11;
-    alpha_max =25.0;
-    alpha_min =0.05;
-
+    h_bar       = 1;
+    e           = 1;
+    m_e         = 1;
+    e4pi        = 1;
+    alpha       = 0.1;
+    s           = 11;
+    alpha_min   = 0.05;
+    alpha_max   = 25.0;
 
     for (int i = 0; i < nbr_of_alpha_trials; i++)
     {
