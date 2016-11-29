@@ -55,12 +55,13 @@ int main()
     alpha       = 0.1;
     s           = 11;
     alpha_min   = 0.05;
-    alpha_max   = 25.0;
+    alpha_max   = 0.25;
 
     for (int i = 0; i < nbr_of_alpha_trials; i++)
     {
         double x= (double)(i)/(nbr_of_alpha_trials-1);
         alpha = calc_alpha_exp(x,alpha_min,alpha_max);
+        alpha=alpha_min-(alpha_max-alpha_min)*x;
         double en=0;
         for (int j = 0; j < nbr_of_runs; j++)
         {
