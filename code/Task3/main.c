@@ -59,7 +59,8 @@ int main()
 
     for (int i = 0; i < nbr_of_alpha_trials; i++)
     {
-        alpha = alpha_min+(alpha_max-alpha_min)*(double)(i)/(double)(nbr_of_alpha_trials-1);
+        double x= (double)(i)/(nbr_of_alpha_trials-1);
+        alpha = calc_alpha_exp(x,alpha_min,alpha_max);
         double en=0;
         for (int j = 0; j < nbr_of_runs; j++)
         {

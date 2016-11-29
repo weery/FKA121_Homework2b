@@ -4,7 +4,7 @@ angle_diff = importdata('angle_diff.dat');
 
 [h,bin]=histcounts(angle_diff,'Normalization','pdf');
 
-plot(bin(1:end-1),h)
+plot((bin(1:end-1)+bin(2:end))/2,h)
 
 xlabel('Och jag med','interpreter','latex')
 ylabel('Jag \"ar fel','interpreter','latex')

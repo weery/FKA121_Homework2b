@@ -22,7 +22,6 @@ for i=1:(size_alpha(2)/2)
     end
 end
 
-
 plot(alpha_energy(:,idx))
 hold on
 plot(tot_min_idx,alpha_energy(tot_min_idx,idx),'*')
