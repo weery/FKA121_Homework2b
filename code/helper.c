@@ -187,5 +187,6 @@ void print_list(double* data, int N)
 
 double calc_alpha_exp(double x, double min, double max)
 {
-    return min + (max-min)*(exp(pow(x,3))-1.0)/(exp(1.0) - 1.0);
+    double power= 3.4;
+    return min + (max-min)*(exp(pow(x,power))-1.0)/(exp(1.0) - 1.0);
 }
