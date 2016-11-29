@@ -1,11 +1,15 @@
-clear all, clc, close all
+clear all; clc; close all
 
 angle_diff = importdata('angle_diff.dat');
 
-[h,bin]=histcounts(angle_diff,'Normalization','pdf');
+x = cos(angle_diff);
 
-plot((bin(1:end-1)+bin(2:end))/2,h)
+[h,bin]=histcounts(x,'Normalization','pdf');
 
-xlabel('Och jag med','interpreter','latex')
-ylabel('Jag \"ar fel','interpreter','latex')
-title('En plott som \"ar fel och ska r\"attas till','interpreter','latex')
+plot(bin(1:end-1),h)
+axis([-1 1 0 5])
+
+xlabel('$x = \cos (\theta_1-\theta_2)$','interpreter','latex', 'fontsize', 15)
+ylabel('$P(x)$','interpreter','latex', 'fontsize', 15)
+title('Distribution of $\Delta \theta$ for the electrons',...
+    'interpreter','latex', 'fontsize', 15)

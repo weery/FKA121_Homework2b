@@ -18,6 +18,7 @@ plot((b(1:end-1)+b(2:end))/2,h,'*')
 xlim([0,max(radius)])
 legend('Simulated distribution','Unscreened nucleus','Variationally optimized')
 
-xlabel('$Radius / [{\AA}]$','interpreter','latex')
-ylabel('$RDF / [{\AA}^{-1}]$','interpreter','latex')
-title('Radial distribution function of helium electrons','interpreter','latex')
+xlabel('$Radius / [{\AA}]$','interpreter','latex', 'fontsize', 15)
+ylabel('$RDF / [{\AA}^{-1}]$','interpreter','latex', 'fontsize', 15)
+title('Radial distribution function of helium electrons',...
+    'interpreter','latex', 'fontsize', 15)
