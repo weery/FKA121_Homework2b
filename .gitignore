@@ -17,6 +17,7 @@ code/*/run
 
 # Figures
 *.pdf
+*.png
 
 # Misc. report stuff
 report/*.aux
