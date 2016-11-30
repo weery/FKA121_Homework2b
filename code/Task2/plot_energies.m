@@ -5,7 +5,7 @@ energies=importdata('energy.dat');
 x=(1:length(energies))';
 mean = cumsum(energies)./x;
 
-plot(mean)
+plot(mean(1:10000))
 
 ylabel('Energy [$a.u$]','interpreter','latex')
 xlabel('Number of trials [$\#$]','interpreter','latex')

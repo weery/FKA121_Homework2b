@@ -17,6 +17,7 @@ double  trial_wave(double*, double*, double);
 double  local_energy(double*, double*, double);
 void    new_configuration(double *, double*);
 double  montecarlo(int, int, double(), double(), double);
+double  montecarlo_energy_out(int, int, double(), double(), double, double*);
 double  density_probability(double,double);
 
 // MAIN PROGRAM
@@ -33,15 +34,15 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials       =   100000;
+    int nbr_of_trials       =   1000000;
 
     // Task Specific parameters
     int s;
     double alpha_min;
     double alpha_max;
 
-    int nbr_of_alpha_trials =   100;
-    int nbr_of_trials_eq    =   30000;
+    int nbr_of_alpha_trials =   25;
+    int nbr_of_trials_eq    =   300000;
     int nbr_of_runs         =   100;
 
     #define energy(i,j)  (energy_arr[j*nbr_of_alpha_trials+i])
@@ -52,18 +53,26 @@ int main()
     e           = 1;
     m_e         = 1;
     e4pi        = 1;
-    alpha       = 0.1;
-    s           = 11;
     alpha_min   = 0.05;
     alpha_max   = 0.25;
+
+    double* energy_mean_var = (double*)malloc(3*nbr_of_alpha_trials*sizeof(double));
 
     for (int i = 0; i < nbr_of_alpha_trials; i++)
     {
         double x= (double)(i)/(nbr_of_alpha_trials-1);
         alpha = calc_alpha_exp(x,alpha_min,alpha_max);
-        alpha=alpha_min-(alpha_max-alpha_min)*x;
-        double en=0;
-        for (int j = 0; j < nbr_of_runs; j++)
+        alpha=alpha_min+(alpha_max-alpha_min)*x;
+
+        double en_mean_var[2]={0};
+
+        double current_energy = montecarlo_energy_out(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha,en_mean_var);
+        energy(0,i)= current_energy;
+        energy_mean_var[i*3+0]=alpha;
+        energy_mean_var[i*3+1]=en_mean_var[0];
+        energy_mean_var[i*3+2]=en_mean_var[1];
+
+        for (int j = 1; j < nbr_of_runs; j++)
         {
             double current_energy = montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha);
             energy(j,i)= current_energy;
@@ -85,7 +94,15 @@ int main()
     }
     fclose(file);
 
+    file = fopen("alpha_mean_var.dat","w");
+    for (int i = 0; i < nbr_of_alpha_trials; i++)
+    {
+        fprintf(file,"%e \t %e \t %e \n", energy_mean_var[i*3+0],energy_mean_var[i*3+1],energy_mean_var[i*3+2]);
+    }
+    fclose(file);
+
     free(energy_arr);
+    free(energy_mean_var);
     // Free the gsl random number generator
     Free_Generator();
     return 0;
@@ -186,6 +203,48 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
 
     return mean_energy;
 }
+
+double  montecarlo_energy_out(int N, int equilibrium_time,double (*local_e)(double*,double*,double), double (*f)(double*,double*,double), double alpha, double* energy_mean_var)
+{
+    double r_1[nbr_of_dimensions] = { 0 };
+    double r_2[nbr_of_dimensions] = { 0 };
+
+    double* energy = malloc(sizeof(double)*(N-equilibrium_time));
+
+
+    for (int i = 0; i < N; i++)
+    {
+        // Allocate memory for trial state
+        double r_1_new[nbr_of_dimensions];
+        double r_2_new[nbr_of_dimensions];
+
+        // Copy values from previous arrays
+        memcpy(r_1_new, r_1, nbr_of_dimensions*sizeof(double));
+        memcpy(r_2_new, r_2, nbr_of_dimensions*sizeof(double));
+
+        new_configuration(r_1_new, r_2_new);
+
+        double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f,nbr_of_dimensions);
+
+
+        double r = randq();
+        if (relative_prob > r)
+        {
+            memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
+            memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
+        }
+        if (i >= equilibrium_time)
+            energy[i-equilibrium_time] = local_e(r_1,r_2,alpha);
+    }
+
+    energy_mean_var[0] = calc_mean(energy,N-equilibrium_time);
+    energy_mean_var[1] = calc_var(energy,N-equilibrium_time);
+
+    free(energy);
+
+    return energy_mean_var[0];
+}
+
 
 double density_probability(double r, double Z)
 {

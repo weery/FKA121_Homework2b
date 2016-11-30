@@ -31,7 +31,7 @@
     \label{fig:RDF}
 \end{figure}
 
-In this problem we studied a He atom using the variational Monte Carlo method with the Metropolis algorithm. In the Metropolis algorithm a new trial state is obtained by randomly displacing both electrons in all three dimensions simultaneously. The displacement is bounded by a cube with side $d$, where $d$ is a simulation parameter which was chosen as 1 \AA. Other equations used can be found in \cite{probdesc}.
+In this problem we studied a He atom using the variational Monte Carlo method with the Metropolis algorithm. In the Metropolis algorithm a new trial state is obtained by randomly displacing both electrons in all three dimensions simultaneously. The displacement is bounded by a cube with side $d$, where $d$ is a simulation parameter which was chosen as $\unit[1]{\AA}$. Other equations used can be found in \cite{probdesc}.
 
 From the obtained sample points, a radial probability distribution function could be approxiated, which can be seen in Fig.~\ref{fig:RDF} (left). Comparing the result to the variationally optimized distribution and the central field approximation result we conclude that that the results are the same as the variationally optimized distribution and that the method is working properly.
 
@@ -42,8 +42,6 @@ Transforming these sample points to spherical coordinates we can study the corre
 
 From the variational Monte Carlo we obtain the result in Fig.~\ref{fig:RDF}. This indicates a clear correlation where the $\theta$ coordinate of the electrons tends to be approximately the same. At least a slight correlation is expected, however whether it should be this strongly correlated or not, we do not know.
 
-
-
 \section*{Problem 2}
 
 \begin{figure}[H]
@@ -51,11 +49,17 @@ From the variational Monte Carlo we obtain the result in Fig.~\ref{fig:RDF}. Thi
 	\captionsetup[subfigure]{justification=centering}
 	\begin{subfigure}[b]{0.4\textwidth}
 		\centering
+		\includegraphics[width=\textwidth]{graphics/task2/local_energy.png}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.4\textwidth}
+		\centering
 		\includegraphics[width=\textwidth]{graphics/task2/block_error.png}
 	\end{subfigure}
-	\caption{Estimation of the statistical inefficiency based on different block lengths}
+	\caption{\textit{Left:} The estimation of the ground state energy $E_0$ for different number of trials without equilibration, there is not much deviation in the energy for $\approx10^4$ trials. \textit{Right:} Estimation of the statistical inefficiency based on different block lengths. After the length of about 200 we can see that the statistical inefficiency $s$ deviates around 11 and starts to go slightly down for higher lengths.}
 	\label{fig:block_error}
 \end{figure}
+
+
 
 
 \section*{Problem 3}

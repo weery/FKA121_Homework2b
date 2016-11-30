@@ -16,14 +16,8 @@
 double trial_wave(double*, double*, double);
 double local_energy(double*, double*, double);
 void   new_configuration(double *, double*);
-double montecarlo(int, int, double(), double(), double);
-double montecarlo_trial(int,int,double(),double(),double);
-double montecarlo_E(int,int,double(),double(),double);
 double density_probability(double,double);
-
 void montecarlo_E_trial(int,int,double(),double(),double(),double,double*);
-
-//void montecarlo_E_trial(int N ,int equilibrium_time,double (*local_e)(double*,double*,double),double(*gradient)(double*,double*,double,int),double(*prob)(double*,double*,double),double alpha,double* out)
 
 // MAIN PROGRAM
 // ------------------------------------------------------------------
@@ -39,8 +33,6 @@ int main()
     double e4pi;
     double alpha_0;
 
-
-
     // Task Specific parameters
     double A;
     double beta;
@@ -48,7 +40,7 @@ int main()
     int nbr_of_trials       =   100000;
     int nbr_of_trials_eq    =   30000;
     int max_p               =   1000;
-    int nbr_of_runs         =   5;
+    int nbr_of_runs         =   25;
 
     #define alpha_p(i,a,p) (alpha_p_arr[i*max_p*2+a*max_p+p])
     double* alpha_p_arr = (double*)malloc(2*max_p*nbr_of_runs*sizeof(double));
@@ -157,7 +149,6 @@ void new_configuration(double * r_1, double* r_2)
     }
 }
 
-
 void montecarlo_E_trial(int N ,int equilibrium_time,double (*local_e)(double*,double*,double),double(*gradient)(double*,double*,double,int),double(*prob)(double*,double*,double),double alpha,double* out)
 {
     double r_1[nbr_of_dimensions] = { 0 };
@@ -205,89 +196,6 @@ void montecarlo_E_trial(int N ,int equilibrium_time,double (*local_e)(double*,do
     out[0]=mean_energy;
     out[1]=mean_grad_trial;
     out[2]=mean_grad_trial_energy;
-}
-
-
-double montecarlo_trial(int N ,int equilibrium_time,double(*gradient)(double*,double*,double,int),double(*prob)(double*,double*,double),double alpha)
-{
-    double r_1[nbr_of_dimensions] = { 0 };
-    double r_2[nbr_of_dimensions] = { 0 };
-
-    double* energy = malloc(sizeof(double)*(N-equilibrium_time));
-
-
-    for (int i = 0; i < N; i++)
-    {
-        // Allocate memory for trial state
-        double r_1_new[nbr_of_dimensions];
-        double r_2_new[nbr_of_dimensions];
-
-        // Copy values from previous arrays
-        memcpy(r_1_new, r_1, nbr_of_dimensions*sizeof(double));
-        memcpy(r_2_new, r_2, nbr_of_dimensions*sizeof(double));
-
-        new_configuration(r_1_new, r_2_new);
-
-        double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,prob,nbr_of_dimensions);
-
-        double r = randq();
-        if (relative_prob > r)
-        {
-            memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
-            memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
-        }
-        if (i >= equilibrium_time)
-            energy[i-equilibrium_time] = gradient(r_1,r_2,alpha,nbr_of_dimensions);
-    }
-
-    double mean_energy =calc_mean(energy,N-equilibrium_time);
-
-    free (energy);
-
-    return mean_energy;
-}
-
-
-double  montecarlo_E(int N, int equilibrium_time,double (*local_e)(double*,double*,double), double (*f)(double*,double*,double), double alpha)
-{
-    double r_1[nbr_of_dimensions] = { 0 };
-    double r_2[nbr_of_dimensions] = { 0 };
-
-    double* energy = malloc(sizeof(double)*(N-equilibrium_time));
-
-
-    for (int i = 0; i < N; i++)
-    {
-        // Allocate memory for trial state
-        double r_1_new[nbr_of_dimensions];
-        double r_2_new[nbr_of_dimensions];
-
-        // Copy values from previous arrays
-        memcpy(r_1_new, r_1, nbr_of_dimensions*sizeof(double));
-        memcpy(r_2_new, r_2, nbr_of_dimensions*sizeof(double));
-
-        new_configuration(r_1_new, r_2_new);
-
-        double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f,nbr_of_dimensions);
-
-
-        double r = randq();
-        if (relative_prob > r)
-        {
-            memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
-            memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
-        }
-        if (i >= equilibrium_time)
-            energy[i-equilibrium_time] = local_e(r_1,r_2,alpha);
-    }
-
-
-
-    double mean_energy =calc_mean(energy,N-equilibrium_time);
-
-    free (energy);
-
-    return mean_energy;
 }
 
 double density_probability(double r, double Z)

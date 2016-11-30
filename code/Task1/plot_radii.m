@@ -16,7 +16,7 @@ ax.ColorOrderIndex = 1;
 plot((b(1:end-1)+b(2:end))/2,h,'*')
 
 xlim([0,max(radius)])
-legend('Simulated distribution','Unscreened nucleus','Variationally optimized')
+legend('Unscreened nucleus','Variationally optimized','Simulated distribution')
 
 xlabel('$Radius / [{\AA}]$','interpreter','latex', 'fontsize', 15)
 ylabel('$RDF / [{\AA}^{-1}]$','interpreter','latex', 'fontsize', 15)
