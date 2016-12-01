@@ -12,6 +12,35 @@
 
 \section*{Introduction}
 
+In quantum mechanics we often have a Hamiltonian $\mathbf{H}$ that describes the energy of the studied system. Given a wave function $\psi$, the corresponding energy for that state is given by,
+
+\begin{equation}
+E=\frac{\left<\psi|\mathbf{H}|\psi\right>}{\left<\psi|\psi\right>}.
+\end{equation}
+
+For the Hamiltonian we have a corresponding ground state energy $E_0$ which is the lowest energy possible. The wave function $\psi_0$ that represents this lowest energy is often not known and a trial wave function $\phi$ is guessed. For any such $\phi \neq \psi_0$, the energy given by the Hamiltonian will always be larger than the ground state energy, $E \geq E_0$. For the next few problems we want to study the Hamiltonian describing the energy of a helium atom with two electrons. This Hamiltonian, neglecting fine structure, have the following form,
+
+\begin{equation}
+\mathbf{H}=-\frac{\hbar}{2m_e}\left(\nabla_1^2+\nabla_2^2\right)-\frac{e^2}{4\pi \epsilon_0}\left(\frac{2}{r_1}+\frac{2}{r_2}-\frac{1}{|r_1-r_2|}\right),
+\end{equation} 
+
+where $m_e$ is the mass of a electron, $e$ is the elementary charge, $\hbar$ is the reduced Planck constant, $\epsilon_0$ is the vacuum permittibility, $r_1$ and $r_2$ are the distances of the two electrons from the nucleus and the distance between these are $|\mathbf{r}_1-\mathbf{r}_2|$. For simplicity we use atomic units, i.e. $\hbar=e=m=4\pi\epsilon=1$. We want to see how well the trial wave,
+
+\begin{equation}
+\psi_T(\mathbf{r_1},\mathbf{r_2})=e^{-2r_1}e^{-2r_2}e^{\frac{r_{12}}{2(1+\alpha r_{12})}},
+\end{equation}
+
+is compared to the unknown ground state wave function $\psi_0$, where $\alpha$ is a parameter to be optimized. To calculate the energy for this trial wave we need to integrate over the whole physical line in 6 dimensions. This cannot be done analytically and we need to use numerical approximation methods to evaluate the integral. We will use the variational Monte Carlo method using the Metropolis algorithm. For each state $(\mathbf{r_1},\mathbf{r_2})$ we thus have the \textit{local energy},
+
+\begin{equation}
+E_{L}(\mathbf{r}_1,\mathbf{r}_2)= \frac{\mathbf{H}\psi_L(\mathbf{r}_1,\mathbf{r}_2)}{\psi_L(\mathbf{r}_1,\mathbf{r}_2)}
+\end{equation}
+
+and the normalised probability to be in this state is,
+
+$\rho(\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}{\int dr_1dr_2|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}$.
+
+This probability will never be calculated directly as we only need the relative probabilities from the current state to a new state.
 
 
 \section*{Problem 1}
