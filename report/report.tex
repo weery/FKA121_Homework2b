@@ -38,7 +38,9 @@ E_{L}(\mathbf{r}_1,\mathbf{r}_2)= \frac{\mathbf{H}\psi_L(\mathbf{r}_1,\mathbf{r}
 
 and the normalised probability to be in this state is,
 
-$\rho(\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}{\int dr_1dr_2|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}$.
+\begin{equation}
+(\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}{\int dr_1dr_2|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}.
+\end{equation}
 
 This probability will never be calculated directly as we only need the relative probabilities from the current state to a new state.
 
@@ -88,6 +90,12 @@ From the variational Monte Carlo we obtain the result in Fig.~\ref{fig:RDF}. Thi
 	\label{fig:block_error}
 \end{figure}
 
+In order for the Metropolis algorithm to yield good and accurate results we need the system to run for a time in order to reach statistically likely configurations as the initial condition might be very unlikely. We can see in Fig. \ref{fig:block_error}(left) that we need discard $\approx10^4$ trials. For the remainder of the tasks we go well beyond this number, we take one tenth of the total trials as equilibration, to really make sure we reach a good statistically likely Markov chain.\\
+
+When we know where to start our simulation we need to know how correlated the trial data is in order to receive accurate statistics. If we take the energy in each time-step we would like to know it's statistical inefficiency. This calculation is done in two ways to show our results are rigorous, first by considering blocks of different lengths and calculate the correlation of the data in these blocks, and secondly by calculating the auto-correlation function.\\
+
+The results for using the block length can be seen in Fig.\ref{fig:block_error}(right) and we see that it stagnates around 11 for about 200 in block length. The statistical inefficiency using the auto-correlation was also 11.
+
 
 
 
@@ -123,16 +131,37 @@ $E_{min}=-2.891044220000000$
 
 \section*{Problem 5}
 
-$E_min=-2.878146$
+$E_min=-2.878223$
 
 
 \bibliography{references}
 \bibliographystyle{plain}
 
+
+\begin{comment}
 \appendix
 \section{Source code}
+\subsection{\texttt{helper.c}}
+\lstinputlisting[language=c, numbers=left]{../code/helper.c}
+
+\subsection{\texttt{rng\_gen.c}}
+\lstinputlisting[language=c, numbers=left]{../code/rng_gen.c}
 
 \subsection{\texttt{Task1/main.c}}
-%\lstinputlisting[language=c, numbers=left]{../code/Task1/main.c}
+\lstinputlisting[language=c, numbers=left]{../code/Task1/main.c}
+
+\subsection{\texttt{Task2/main.c}}
+\lstinputlisting[language=c, numbers=left]{../code/Task2/main.c}
+
+\subsection{\texttt{Task3/main.c}}
+\lstinputlisting[language=c, numbers=left]{../code/Task3/main.c}
+
+\subsection{\texttt{Task4/main.c}}
+\lstinputlisting[language=c, numbers=left]{../code/Task4/main.c}
+
+\subsection{\texttt{Task5/main.c}}
+\lstinputlisting[language=c, numbers=left]{../code/Task5/main.c}
+\end{comment}
+
 
 \end{document}
