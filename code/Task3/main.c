@@ -42,7 +42,7 @@ int main()
     double alpha_max;
 
     int nbr_of_alpha_trials =   25;
-    int nbr_of_trials_eq    =   300000;
+    int nbr_of_trials_eq    =   nbr_of_trials/10;
     int nbr_of_runs         =   100;
 
     #define energy(i,j)  (energy_arr[j*nbr_of_alpha_trials+i])
@@ -66,7 +66,7 @@ int main()
 
         double en_mean_var[2]={0};
 
-        double current_energy = montecarlo_energy_out(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha,en_mean_var);
+        double current_energy = montecarlo_energy_out(nbr_of_trials*100,nbr_of_trials_eq*100,local_energy, trial_wave, alpha,en_mean_var);
         energy(0,i)= current_energy;
         energy_mean_var[i*3+0]=alpha;
         energy_mean_var[i*3+1]=en_mean_var[0];
