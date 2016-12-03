@@ -39,10 +39,14 @@ E_{L}(\mathbf{r}_1,\mathbf{r}_2)= \frac{\mathbf{H}\psi_L(\mathbf{r}_1,\mathbf{r}
 and the normalised probability to be in this state is,
 
 \begin{equation}
-(\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}{\int dr_1dr_2|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}.
+\rho(\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}{\int dr_1dr_2|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}.
 \end{equation}
 
-This probability will never be calculated directly as we only need the relative probabilities from the current state to a new state.
+This probability will never be calculated directly as we only need the relative probabilities from the current state to a new state,
+
+\begin{equation}
+\rho_{rel}(\mathbf{r'}_1,\mathbf{r'}_2,\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r'}_1,\mathbf{r}_2')|^2}{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}.
+\end{equation}
 
 
 \section*{Problem 1}
@@ -107,38 +111,57 @@ The results for using the block length can be seen in Fig.\ref{fig:block_error}(
 	\captionsetup[subfigure]{justification=centering}
 	\begin{subfigure}[b]{0.4\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{graphics/task3/lowest_energy.png}
+		\includegraphics[width=\textwidth]{graphics/task3/lowest_energy_indep_alpha.png}
 	\end{subfigure}
-	\caption{Estimation of the statistical inefficiency based on different block lengths}
+	\begin{subfigure}[b]{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{graphics/task3/lowest_energy_one_alpha_run.png}
+	\end{subfigure}
+	\caption{Estimation of the optimal variation parameter $\alpha$ for calculating the lowest energy in the Metropolis algorithm. This estimation is done by running several independent runs for each $\alpha$ (\textit{left}) and also using a long simulation with only one run per $\alpha$ (\textit{right}).}
 	\label{fig:optimize_alpha}
 \end{figure}
 
-
+In order to determine the best value of the variational parameter $\alpha$, we run the Metropolis using several different $\alpha$ values in the interval $0.05 \leq \alpha \leq 0.025$. We estimate the $\alpha$ dependence in two ways, first by doing short independent runs for the same $\alpha$ and estimating the mean and standard deviation from the average energies of the individual runs, see Fig.~\ref{fig:optimize_alpha} (\textit{left}). The second way we do by taking a long run, about $100$ times longer than the short ones, and estimating the mean and standard deviation of the energy on the single run over time, see Fig.~\ref{fig:optimize_alpha} (\textit{right}). 
 
 \section*{Problem 4}
 
-\begin{equation}
-	\psi_t(r_1,r_2) = e^{-2r_1}e^{-2r_2}e^{\frac{r_{12}}{2(1+\alpha r_{12})}}
-\end{equation}
+Instead of guessing the optimal $\alpha$ we can instead use a damped steepest decent to reach a local minimum for the $\alpha$. Here we use the update rule in the method,
 
 \begin{equation}
-	\nabla \alpha \ln{\psi_t(r_1,r_2)} = -\frac{r_{12}^2}{2(1+\alpha r_{12})^2}
+\alpha_{p+1} = \alpha_p-\gamma_p \nabla_\alpha E(\alpha_p)
+\end{equation} 
+
+where the damping coefficient,
+
+\begin{equation}
+\gamma_p=Ap^{-\beta},
 \end{equation}
 
-$\beta = 0.75$
-$\alpha_{min}=0.142553129000000$
-$E_{min}=-2.891044220000000$
+with $A=1$ and $0.5\leq\beta < 1$. The gradient $\nabla_\alpha E(\alpha)$ is calculated to,
+
+\begin{equation}
+\nabla_\alpha E(\alpha) = 2\left[\left<E_L(\mathcal{R})\nabla_\alpha \ln{\psi_T(\mathcal{R})}\right>-\left<E_L(\mathcal{R})\right>\left<\nabla_\alpha\ln{\psi_T(\mathcal{R})}\right>\right]
+\end{equation}
+
+where $\mathcal{R}$ is the electron state configurations and the averages are calculated in the ordinary Metropolis algorithm. The gradient on the $wave function $ is,
+
+\begin{equation}
+\nabla_\alpha \ln{\psi_T(\mathcal{R})} = -\frac{r_{12}^2}{2(1+\alpha r_{12})^2}.
+\end{equation}
+
+Using this method, and with $\beta = 0.75$ we find that the minimum energy to be $E_{min}=-2.891$ with the corresponding $\alpha$ as $\alpha_{min}=0.1426$. This found $\alpha$ lies between the two results gained in Problem 3.
+
+% TODO: more betas, beta graph
 
 \section*{Problem 5}
 
-$E_min=-2.878223$
+Using the $\alpha$ found in Problem 4, we do a long simulation in order to see what value we receive. We find our energy to be, $E_{min}=-2.878223$ which lies between the Hartree value $\unit[-2.862]{a.u.}$ and the experimental number $\unit[-2.9033]{a.u.}$
 
 
 \bibliography{references}
 \bibliographystyle{plain}
 
 
-\begin{comment}
 \appendix
 \section{Source code}
 \subsection{\texttt{helper.c}}
@@ -161,7 +184,6 @@ $E_min=-2.878223$
 
 \subsection{\texttt{Task5/main.c}}
 \lstinputlisting[language=c, numbers=left]{../code/Task5/main.c}
-\end{comment}
 
 
 \end{document}
