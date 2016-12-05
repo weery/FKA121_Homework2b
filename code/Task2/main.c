@@ -26,7 +26,8 @@ int main()
     // Initialize the gsl random number generator
     Initialize_Generator();
 
-    // Variables
+    // ---- Variable Declarations ----
+    // -------------------------------
     double h_bar;
     double e;
     double m_e;
@@ -36,32 +37,33 @@ int main()
     int nbr_of_trials       =   100000;
     int nbr_of_block_trials =   1000;
 
-
-
     double* energy                = (double*)malloc(nbr_of_trials*sizeof(double));
     double* block_error_estimate  = (double*)malloc(nbr_of_block_trials*sizeof(double));
 
-    // Initialize Variables
+
+    // ---- Initialize Variables ----
+    // ------------------------------
     h_bar   = 1;
     e       = 1;
     m_e     = 1;
     e4pi    = 1;
     alpha   = 0.1;
 
+
+    // ========== RUN MONTE CARLO SIMULATION ================
     printf("Start Monte Carlo simulation\n");
-
     montecarlo(nbr_of_trials,local_energy, trial_wave, alpha,energy);
-
     printf("Monte Carlo simulaton done\n\n");
 
     int nbr_of_trials_eq    =   15000;
-
     block_error_estimates(&energy[nbr_of_trials_eq], block_error_estimate, nbr_of_trials-nbr_of_trials_eq, nbr_of_block_trials);
-
     double s2= auto_correlation(&energy[nbr_of_trials_eq],nbr_of_trials-nbr_of_trials_eq);
 
     printf("%.f\n", s2 );
+    
 
+    // ------ Print results to file -------
+    // ------------------------------------
     FILE* file;
     file = fopen("energy.dat","w");
     for (int i = 0; i < nbr_of_trials; i++)
@@ -141,8 +143,8 @@ void  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(do
     double r_2[nbr_of_dimensions] = { 0 };
     int rejects = 0;
 
-    r_1[1]=0.1;
-    r_2[1]=-0.1;
+    r_1[1] = 0.1;
+    r_2[1] = -0.1;
 
     for (int i = 0; i < N; i++)
     {
@@ -154,6 +156,7 @@ void  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(do
         memcpy(r_1_new, r_1, nbr_of_dimensions*sizeof(double));
         memcpy(r_2_new, r_2, nbr_of_dimensions*sizeof(double));
 
+        // Generate new configuration
         new_configuration(r_1_new, r_2_new);
 
 

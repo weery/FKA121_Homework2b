@@ -27,7 +27,8 @@ int main()
     // Initialize the gsl random number generator
     Initialize_Generator();
 
-    // Variables
+    // ---- Variable Declarations ----
+    // -------------------------------
     double h_bar;
     double e;
     double m_e;
@@ -48,11 +49,12 @@ int main()
     #define energy(i,j)  (energy_arr[j*nbr_of_alpha_trials+i])
     double* energy_arr          =   (double*)malloc(nbr_of_alpha_trials*nbr_of_runs*sizeof(double));
 
-    // Initialize Variables
-    h_bar       = 1;
-    e           = 1;
-    m_e         = 1;
-    e4pi        = 1;
+    // ---- Initialize Variables ----
+    // ------------------------------
+    h_bar       = 1.0;
+    e           = 1.0;
+    m_e         = 1.0;
+    e4pi        = 1.0;
     alpha_min   = 0.05;
     alpha_max   = 0.25;
 
@@ -79,6 +81,9 @@ int main()
         }
     }
 
+
+    // ----- Print results to file -----
+    // ---------------------------------
     FILE* file;
 
     file = fopen("alpha_avg_energy.dat","w");
@@ -180,6 +185,7 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
         memcpy(r_1_new, r_1, nbr_of_dimensions*sizeof(double));
         memcpy(r_2_new, r_2, nbr_of_dimensions*sizeof(double));
 
+        // Generate new configuration
         new_configuration(r_1_new, r_2_new);
 
         double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f,nbr_of_dimensions);
