@@ -4,7 +4,8 @@ alpha_energy=importdata('alpha.dat');
 
 size_alpha=size(alpha_energy);
 
-
+% make new loop that starts at k=1:4
+% and start in alpha_energy ((k-1)*200)
 
 tot_min =0;
 tot_min_alpha=0;

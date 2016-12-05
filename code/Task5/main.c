@@ -47,7 +47,7 @@ int main()
     e       = 1;
     m_e     = 1;
     e4pi    = 1;
-    alpha   = 0.143070500000000;
+    alpha   = 0.1430705;
 
     double sum=0;
     for (int i = 0; i < nbr_of_runs; i++)
