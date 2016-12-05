@@ -7,7 +7,7 @@ x = cos(angle_diff);
 [h,bin]=histcounts(x,'Normalization','pdf');
 
 plot(bin(1:end-1),h)
-axis([-1 1 0 5])
+axis([-1 1 0 1])
 
 xlabel('$x = \cos |\theta_1-\theta_2|$','interpreter','latex', 'fontsize', 15)
 ylabel('$P(x)$','interpreter','latex', 'fontsize', 15)

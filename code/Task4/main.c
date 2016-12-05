@@ -35,15 +35,20 @@ int main()
 
     // Task Specific parameters
     double A;
-    double beta;
+    double beta_min;
+    double beta_max;
 
     int nbr_of_trials       =   100000;
     int nbr_of_trials_eq    =   30000;
-    int max_p               =   1000;
-    int nbr_of_runs         =   25;
+    int max_p               =   200;
+    int nbr_of_runs         =   10;
+    int nbr_of_beta_runs    =   10;
 
     #define alpha_p(i,a,p) (alpha_p_arr[i*max_p*2+a*max_p+p])
     double* alpha_p_arr = (double*)malloc(2*max_p*nbr_of_runs*sizeof(double));
+
+    #define beta_energy(b,a) (beta_energy[b*3+a])
+    double* beta_energy = (double*)malloc(3*nbr_of_beta_runs*sizeof(double));
 
     // Initialize Variables
     h_bar   = 1;
@@ -52,33 +57,49 @@ int main()
     e4pi    = 1;
     alpha_0 = 0.1;
     A       = 1;
-    beta    = 0.75;
+    beta_min    = 0.50;
+    beta_max    = 1.0;
 
-    for (int i = 0; i < nbr_of_runs; i++)
+    for (int b = 0; b < nbr_of_beta_runs; b++)
     {
-        double current_alpha = alpha_0;
-        printf("New Simulation\n");
-        for (int p = 0; p < max_p; p++)
+        double min_alpha= 100;
+        double min_energy = 100;
+        double beta = beta_min+(beta_max-beta_min)*(double)(b)/(double)(nbr_of_beta_runs);
+        for (int i = 0; i < nbr_of_runs; i++)
         {
-            double* output = (double*)malloc(3*sizeof(double));
-            montecarlo_E_trial(nbr_of_trials,nbr_of_trials_eq,local_energy,gradient_alpha, trial_wave, current_alpha,output);
+            double current_alpha = alpha_0;
+            printf("New Simulation\n");
+            for (int p = 0; p < max_p; p++)
+            {
+                double* output = (double*)malloc(3*sizeof(double));
+                montecarlo_E_trial(nbr_of_trials,nbr_of_trials_eq,local_energy,gradient_alpha, trial_wave, current_alpha,output);
 
-            double current_energy = output[0];
-            double current_gradie = output[1];
-            double current_produc = output[2];
+                double current_energy = output[0];
+                double current_gradie = output[1];
+                double current_produc = output[2];
 
-            double grad_energy = 2*(current_produc-current_energy*current_gradie);
+                double grad_energy = 2*(current_produc-current_energy*current_gradie);
 
-            double step = step_length(A,p+1,beta);
-            alpha_p(i,0,p)=current_alpha;
-            alpha_p(i,1,p)=current_energy;
-            //printf("%e \t %e \n", alpha_p(i,0,p), alpha_p(i,1,p));
-            current_alpha -= step*grad_energy;
+                double step = step_length(A,p+1,beta);
+                alpha_p(i,0,p)=current_alpha;
+                alpha_p(i,1,p)=current_energy;
+                if (current_energy < min_energy)
+                {
+                    min_energy = current_energy;
+                    min_alpha = current_alpha;
+                }
+                //printf("%e \t %e \n", alpha_p(i,0,p), alpha_p(i,1,p));
+                current_alpha -= step*grad_energy;
+            }
         }
+        beta_energy(b,0) = beta;
+        beta_energy(b,1) = min_alpha;
+        beta_energy(b,2) = min_energy;
     }
 
     FILE* file;
 
+    /*
     file = fopen("alpha.dat","w");
     for (int p = 0; p < max_p; p++)
     {
@@ -89,8 +110,18 @@ int main()
         fprintf(file, "\n");
     }
     fclose(file);
+    */
+
+    file = fopen("beta.dat","w");
+    fprintf(file, "Beta \t Alpha \t Energy \n");
+    for (int b = 0; b < nbr_of_beta_runs; b++)
+    {
+        fprintf(file, "%e \t %e \t %e \n", beta_energy(b,0), beta_energy(b,1), beta_energy(b,2));
+    }
+    fclose(file);
 
     free(alpha_p_arr);
+    free(beta_energy);
     // Free the gsl random number generator
     Free_Generator();
     return 0;
