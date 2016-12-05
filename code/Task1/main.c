@@ -175,7 +175,15 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
             double s_2[3];
             to_spherical(r_1,s_1);
             to_spherical(r_2,s_2);
-            angle_diff[i-equilibrium_time]=fabs(s_2[2]-s_1[2]);
+
+            /*
+             * Scalar product in spherical coords.:
+             * r1*r2*(sin(theta1)*sin(theta2)*cos(phi1-phi2) + cos(theta1)*cos(theta2))
+             * Angle between vectors = arccos ( r1 dot r2 / norm(r1) norm(r2) )
+             */
+
+            angle_diff[i-equilibrium_time] = 
+                acos( sin(s_1[2])*sin(s_2[2])*cos(s_1[1]-s_2[1]) + cos(s_1[2])*cos(s_2[2]) );
             energy[i-equilibrium_time] = local_e(r_1,r_2,alpha);
         }
     }
