@@ -42,13 +42,10 @@ int main()
     int nbr_of_trials_eq    =   30000;
     int max_p               =   200;
     int nbr_of_runs         =   10;
-    int nbr_of_beta_runs    =   10;
+    int nbr_of_beta_runs    =   4;
 
-    #define alpha_p(i,a,p) (alpha_p_arr[i*max_p*2+a*max_p+p])
-    double* alpha_p_arr = (double*)malloc(2*max_p*nbr_of_runs*sizeof(double));
-
-    #define beta_energy(b,a) (beta_energy[b*3+a])
-    double* beta_energy = (double*)malloc(3*nbr_of_beta_runs*sizeof(double));
+    #define alpha_p(i,a,p,b) (alpha_p_arr[b*max_p*2*nbr_of_beta_runs+i*max_p*2+a*max_p+p])
+    double* alpha_p_arr = (double*)malloc(nbr_of_beta_runs*2*max_p*nbr_of_runs*sizeof(double));
 
     // Initialize Variables
     h_bar   = 1;
@@ -68,7 +65,6 @@ int main()
         for (int i = 0; i < nbr_of_runs; i++)
         {
             double current_alpha = alpha_0;
-            printf("New Simulation\n");
             for (int p = 0; p < max_p; p++)
             {
                 double* output = (double*)malloc(3*sizeof(double));
@@ -81,47 +77,36 @@ int main()
                 double grad_energy = 2*(current_produc-current_energy*current_gradie);
 
                 double step = step_length(A,p+1,beta);
-                alpha_p(i,0,p)=current_alpha;
-                alpha_p(i,1,p)=current_energy;
+                alpha_p(i,0,p,b)=current_alpha;
+                alpha_p(i,1,p,b)=current_energy;
                 if (current_energy < min_energy)
                 {
                     min_energy = current_energy;
                     min_alpha = current_alpha;
                 }
-                //printf("%e \t %e \n", alpha_p(i,0,p), alpha_p(i,1,p));
                 current_alpha -= step*grad_energy;
             }
         }
-        beta_energy(b,0) = beta;
-        beta_energy(b,1) = min_alpha;
-        beta_energy(b,2) = min_energy;
     }
 
     FILE* file;
 
-    /*
     file = fopen("alpha.dat","w");
-    for (int p = 0; p < max_p; p++)
+    for (int b = 0 ; b < nbr_of_beta_runs; b++)
     {
-        for (int i = 0; i < nbr_of_runs; i++)
+        for (int p = 0; p < max_p; p++)
         {
-            fprintf(file,"%e \t %e \t", alpha_p(i,0,p), alpha_p(i,1,p));
+            for (int i = 0; i < nbr_of_runs; i++)
+            {
+                fprintf(file,"%e \t %e \t", alpha_p(i,0,p,b), alpha_p(i,1,p,b));
+            }
+            fprintf(file, "\n");
         }
         fprintf(file, "\n");
     }
     fclose(file);
-    */
-
-    file = fopen("beta.dat","w");
-    fprintf(file, "Beta \t Alpha \t Energy \n");
-    for (int b = 0; b < nbr_of_beta_runs; b++)
-    {
-        fprintf(file, "%e \t %e \t %e \n", beta_energy(b,0), beta_energy(b,1), beta_energy(b,2));
-    }
-    fclose(file);
 
     free(alpha_p_arr);
-    free(beta_energy);
     // Free the gsl random number generator
     Free_Generator();
     return 0;
