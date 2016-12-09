@@ -118,7 +118,7 @@ double trial_wave(double* r_1, double* r_2, double alpha)
     array_diff(r_1,r_2,r_12, nbr_of_dimensions);
     double r12 = array_abs(r_12,nbr_of_dimensions);
 
-    double f_val = exp(-2*r1) * exp(-2*r2) * exp(r12/(2*(1+alpha*r12)));
+    double f_val = exp(-2*r1-2*r2+r12/(2.0*(1.0+alpha*r12)));
 
     return f_val;
 }
@@ -186,7 +186,12 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
 
 
         double r = randq();
-        if (relative_prob > r)
+        if (relative_prob > 1)
+        {
+            memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
+            memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
+        }
+        else if (relative_prob > randq())
         {
             memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
             memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));

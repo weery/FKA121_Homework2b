@@ -80,8 +80,7 @@ double trial_wave(double* r_1, double* r_2, double alpha)
     array_diff(r_1,r_2,r_12, nbr_of_dimensions);
     double r12 = array_abs(r_12,nbr_of_dimensions);
 
-
-    double f_val = exp(-2*r1) * exp(-2*r2) * exp(r12/(2.0*(1.0+alpha*r12)));
+    double f_val = exp(-2*r1-2*r2+r12/(2.0*(1.0+alpha*r12)));
 
     return f_val;
 }
@@ -157,15 +156,16 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
 
         double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f,nbr_of_dimensions);
 
-
-        double r = randq();
-        if (relative_prob > r)
+        if (relative_prob > 1)
         {
             memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
             memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
         }
-        else
-            rejects++;
+        else if (relative_prob > randq())
+        {
+            memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
+            memcpy(r_2, r_2_new, nbr_of_dimensions*sizeof(double));
+        }
 
         if (i >= equilibrium_time)
         {
@@ -182,7 +182,7 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
              * Angle between vectors = arccos ( r1 dot r2 / norm(r1) norm(r2) )
              */
 
-            angle_diff[i-equilibrium_time] = 
+            angle_diff[i-equilibrium_time] =
                 acos( sin(s_1[2])*sin(s_2[2])*cos(s_1[1]-s_2[1]) + cos(s_1[2])*cos(s_2[2]) );
             energy[i-equilibrium_time] = local_e(r_1,r_2,alpha);
         }
