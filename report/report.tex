@@ -60,7 +60,7 @@ This probability will never be calculated directly as we only need the relative 
 
 In this problem we studied a He atom using the variational Monte Carlo method with the Metropolis algorithm. In the Metropolis algorithm a new trial state is obtained by randomly displacing both electrons in all three dimensions simultaneously. The displacement is bounded by a cube with side $d$, where $d$ is a simulation parameter which was chosen as $\unit[1]{\AA}$. Other equations used can be found in \cite{probdesc}.
 
-From the obtained sample points, a radial probability distribution function could be approxiated, which can be seen in Fig.~\ref{fig:RDF} (left). Comparing the result to the variationally optimized distribution and the central field approximation result we conclude that that the results are the same as the variationally optimized distribution and that the method is working properly.
+From the obtained sample points, a radial probability distribution function could be approxiated, which can be seen in Fig.~\ref{fig:RDF} (left). Comparing the result to the variationally optimized distribution and the central field approximation result we conclude that that the results are the same as the variationally optimized distribution and that the method is working properly. This effect is due to screening, causing the effective nucleus charge to be lower than the actual charge.
 
 From these sample points we can also study the correlation of the angle between the two electrons, $\theta$. As stated in \cite{probdesc}, if they are uncorrelated, i.e. equally distributed over the unit sphere, then the probability distribution would be $P(\theta) = \sin \theta / 2$ for $0 < \theta < \pi$, or
 \begin{equation}
@@ -68,6 +68,8 @@ From these sample points we can also study the correlation of the angle between 
 \end{equation}
 
 The variational Monte Carlo yields the results in Fig.~\ref{fig:RDF} (right). This indicates a clear correlation where the electrons tend to be approximately on the opposite side of the nucleus. At least a slight correlation is expected, however whether it should be this strongly correlated or not, we do not know.
+
+The mean energy obtained with variational Monte Carlo was -2.876908 in Hartree units.
 
 
 \section*{Problem 2}
