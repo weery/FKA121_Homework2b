@@ -28,16 +28,16 @@ where $m_e$ is the mass of a electron, $e$ is the elementary charge, $\hbar$ is 
 
 is compared to the unknown ground state wave function $\psi_0$, where $\alpha$ is a parameter to be optimized. To calculate the energy for this trial wave we need to integrate over the whole physical line in 6 dimensions. This cannot be done analytically and we need to use numerical approximation methods to evaluate the integral. We will use the variational Monte Carlo method using the Metropolis algorithm. For each state $(\mathbf{r_1},\mathbf{r_2})$ we thus have the \textit{local energy},
 \begin{equation}
-E_{L}(\mathbf{r}_1,\mathbf{r}_2)= \frac{\mathbf{H}\psi_T(\mathbf{r}_1,\mathbf{r}_2)}{\psi_T(\mathbf{r}_1,\mathbf{r}_2)}
+E_{L}(\mathbf{r}_1,\mathbf{r}_2)= \frac{\mathbf{H}\psi_L(\mathbf{r}_1,\mathbf{r}_2)}{\psi_L(\mathbf{r}_1,\mathbf{r}_2)}
 \end{equation}
 and the normalised probability to be in this state is,
 \begin{equation}
-\rho(\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_T(\mathbf{r}_1,\mathbf{r}_2)|^2}{\int dr_1dr_2|\psi_T(\mathbf{r}_1,\mathbf{r}_2)|^2}.
+\rho(\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}{\int dr_1dr_2|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}.
 \end{equation}
 
 This probability will never be calculated directly as we only need the relative probabilities from the current state to a new state,
 \begin{equation}
-\rho_{rel}(\mathbf{r'}_1,\mathbf{r'}_2,\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_T(\mathbf{r'}_1,\mathbf{r}_2')|^2}{|\psi_T(\mathbf{r}_1,\mathbf{r}_2)|^2}.
+\rho_{rel}(\mathbf{r'}_1,\mathbf{r'}_2,\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r'}_1,\mathbf{r}_2')|^2}{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}.
 \end{equation}
 
 
@@ -46,15 +46,15 @@ This probability will never be calculated directly as we only need the relative 
 \begin{figure}[H]
     \centering
     \captionsetup[subfigure]{justification=centering}
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{graphics/task1/radius.png}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{graphics/task1/angle_diff_dist.png}
     \end{subfigure}
-    \caption{\textit{Left:} Simulated and calculated radial distribution function for the two electrons in the helium atom. \textit{Right:} The distribution of cosine of the relative $\theta$ angle for the two electrons.}
+    \caption{\textit{Left:} Simulated and calculated radial distribution function for the two electrons in the helium atom. \textit{Right:} The distribution of cosine of the angle $\theta$ between the two electrons.}
     \label{fig:RDF}
 \end{figure}
 
@@ -62,23 +62,24 @@ In this problem we studied a He atom using the variational Monte Carlo method wi
 
 From the obtained sample points, a radial probability distribution function could be approxiated, which can be seen in Fig.~\ref{fig:RDF} (left). Comparing the result to the variationally optimized distribution and the central field approximation result we conclude that that the results are the same as the variationally optimized distribution and that the method is working properly.
 
-Transforming these sample points to spherical coordinates we can study the correlation of the $\theta$ coordinates for the two electron. As stated in \cite{probdesc}, if they are uncorrelated, i.e. equally distributed over the unit sphere, then the probability distribution would be $P(\Delta \theta) = \sin (\Delta \theta) / 2$ for $0 < \Delta\theta < \pi$, or
+From these sample points we can also study the correlation of the angle between the two electrons, $\theta$. As stated in \cite{probdesc}, if they are uncorrelated, i.e. equally distributed over the unit sphere, then the probability distribution would be $P(\theta) = \sin \theta / 2$ for $0 < \theta < \pi$, or
 \begin{equation}
-	x = \cos \left|\theta_1 - \theta_2\right| \Rightarrow P(x) = \frac{1}{2},\quad -1 < x < 1.
+	x = \cos \theta \Rightarrow P(x) = \frac{1}{2},\quad -1 < x < 1.
 \end{equation}
 
-From the variational Monte Carlo we obtain the result in Fig.~\ref{fig:RDF}. This indicates a clear correlation where the electrons tend to be approximately the close together. At least a slight correlation is expected, however whether it should be this strongly correlated or not, we do not know.
+The variational Monte Carlo yields the results in Fig.~\ref{fig:RDF} (right). This indicates a clear correlation where the electrons tend to be approximately on the opposite side of the nucleus. At least a slight correlation is expected, however whether it should be this strongly correlated or not, we do not know.
+
 
 \section*{Problem 2}
 
 \begin{figure}[H]
 	\centering
 	\captionsetup[subfigure]{justification=centering}
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[b]{0.48\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task2/local_energy.png}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[b]{0.48\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task2/block_error.png}
 	\end{subfigure}
@@ -101,11 +102,11 @@ The results for using the block length can be seen in Fig.\ref{fig:block_error}(
 \begin{figure}[H]
 	\centering
 	\captionsetup[subfigure]{justification=centering}
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[b]{0.48\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task3/lowest_energy_indep_alpha.png}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[b]{0.48\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task3/lowest_energy_one_alpha_run.png}
 	\end{subfigure}
@@ -169,5 +170,6 @@ Using the $\alpha$ found in Problem 4, we do a long simulation in order to see w
 
 \subsection{\texttt{Task5/main.c}}
 \lstinputlisting[language=c, numbers=left]{../code/Task5/main.c}
+
 
 \end{document}

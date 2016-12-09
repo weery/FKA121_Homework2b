@@ -11,5 +11,5 @@ axis([-1 1 0 1])
 
 xlabel('$x = \cos \theta$','interpreter','latex', 'fontsize', 19)
 ylabel('$P(x)$','interpreter','latex', 'fontsize', 19)
-title('Distribution of $\Delta \theta$ for the electrons',...
+title('Distribution of $\theta$ for the electrons',...
     'interpreter','latex', 'fontsize', 19)
