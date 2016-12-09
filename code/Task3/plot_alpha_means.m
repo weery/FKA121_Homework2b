@@ -8,9 +8,9 @@ errorbar(alpha_mean_var(:,1),alpha_mean_var(:,2),alpha_mean_var(:,3)*sqrt(11/100
 
 xlim([alpha_mean_var(1,1),alpha_mean_var(end,1)])
 
-ylabel('Energy [$a.u.$]','interpreter','latex')
-xlabel('$\alpha$ [$\#$]','interpreter','latex')
-title('Estimation of lowest energy based on one $\alpha$ run','interpreter','latex')
+ylabel('Energy [$a.u.$]','interpreter','latex','fontsize',19)
+xlabel('$\alpha$ [$\#$]','interpreter','latex','fontsize',19)
+title('Estimation of lowest energy based on one $\alpha$ run','interpreter','latex','fontsize',19)
 
 
 

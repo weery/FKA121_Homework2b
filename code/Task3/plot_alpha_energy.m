@@ -31,7 +31,7 @@ text((alpha_energy(min_alpha_idx,1)+alpha_energy(1,1))/2-0.03,mean_alpha(min_alp
 
 xlim([alpha_energy(1,1),alpha_energy(end,1)])
 
-ylabel('Energy [$a.u.$]','interpreter','latex')
-xlabel('$\alpha$ [$\#$]','interpreter','latex')
-title('Estimation of lowest energy based on independent $\alpha$ runs','interpreter','latex')
+ylabel('Energy [$a.u.$]','interpreter','latex','fontsize',19)
+xlabel('$\alpha$ [$\#$]','interpreter','latex','fontsize',19)
+title('Estimation of lowest energy based on $\alpha$ runs','interpreter','latex','fontsize',19)
 
