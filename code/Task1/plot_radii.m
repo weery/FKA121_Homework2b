@@ -16,9 +16,9 @@ ax.ColorOrderIndex = 1;
 plot((b(1:end-1)+b(2:end))/2,h,'*')
 
 xlim([0,max(radius)])
-legend('Unscreened nucleus','Variationally optimized','Simulated distribution')
+legend({'Unscreened nucleus','Variationally optimized','Simulated distribution'},'interpreter','latex','fontsize',15)
 
-xlabel('$Radius / [{\AA}]$','interpreter','latex', 'fontsize', 15)
-ylabel('$RDF / [{\AA}^{-1}]$','interpreter','latex', 'fontsize', 15)
+xlabel('$Radius / [{\AA}]$','interpreter','latex', 'fontsize', 19)
+ylabel('$RDF / [{\AA}^{-1}]$','interpreter','latex', 'fontsize', 19)
 title('Radial distribution function of helium electrons',...
-    'interpreter','latex', 'fontsize', 15)
+    'interpreter','latex', 'fontsize', 19)

@@ -28,16 +28,16 @@ where $m_e$ is the mass of a electron, $e$ is the elementary charge, $\hbar$ is 
 
 is compared to the unknown ground state wave function $\psi_0$, where $\alpha$ is a parameter to be optimized. To calculate the energy for this trial wave we need to integrate over the whole physical line in 6 dimensions. This cannot be done analytically and we need to use numerical approximation methods to evaluate the integral. We will use the variational Monte Carlo method using the Metropolis algorithm. For each state $(\mathbf{r_1},\mathbf{r_2})$ we thus have the \textit{local energy},
 \begin{equation}
-E_{L}(\mathbf{r}_1,\mathbf{r}_2)= \frac{\mathbf{H}\psi_L(\mathbf{r}_1,\mathbf{r}_2)}{\psi_L(\mathbf{r}_1,\mathbf{r}_2)}
+E_{L}(\mathbf{r}_1,\mathbf{r}_2)= \frac{\mathbf{H}\psi_T(\mathbf{r}_1,\mathbf{r}_2)}{\psi_T(\mathbf{r}_1,\mathbf{r}_2)}
 \end{equation}
 and the normalised probability to be in this state is,
 \begin{equation}
-\rho(\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}{\int dr_1dr_2|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}.
+\rho(\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_T(\mathbf{r}_1,\mathbf{r}_2)|^2}{\int dr_1dr_2|\psi_T(\mathbf{r}_1,\mathbf{r}_2)|^2}.
 \end{equation}
 
 This probability will never be calculated directly as we only need the relative probabilities from the current state to a new state,
 \begin{equation}
-\rho_{rel}(\mathbf{r'}_1,\mathbf{r'}_2,\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r'}_1,\mathbf{r}_2')|^2}{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}.
+\rho_{rel}(\mathbf{r'}_1,\mathbf{r'}_2,\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_T(\mathbf{r'}_1,\mathbf{r}_2')|^2}{|\psi_T(\mathbf{r}_1,\mathbf{r}_2)|^2}.
 \end{equation}
 
 
@@ -46,11 +46,11 @@ This probability will never be calculated directly as we only need the relative 
 \begin{figure}[H]
     \centering
     \captionsetup[subfigure]{justification=centering}
-    \begin{subfigure}[b]{0.40\textwidth}
+    \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{graphics/task1/radius.png}
     \end{subfigure}
-    \begin{subfigure}[b]{0.40\textwidth}
+    \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{graphics/task1/angle_diff_dist.png}
     \end{subfigure}
@@ -74,11 +74,11 @@ From the variational Monte Carlo we obtain the result in Fig.~\ref{fig:RDF}. Thi
 \begin{figure}[H]
 	\centering
 	\captionsetup[subfigure]{justification=centering}
-	\begin{subfigure}[b]{0.4\textwidth}
+	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task2/local_energy.png}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.4\textwidth}
+	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task2/block_error.png}
 	\end{subfigure}
@@ -101,11 +101,11 @@ The results for using the block length can be seen in Fig.\ref{fig:block_error}(
 \begin{figure}[H]
 	\centering
 	\captionsetup[subfigure]{justification=centering}
-	\begin{subfigure}[b]{0.4\textwidth}
+	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task3/lowest_energy_indep_alpha.png}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.4\textwidth}
+	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task3/lowest_energy_one_alpha_run.png}
 	\end{subfigure}
@@ -169,6 +169,5 @@ Using the $\alpha$ found in Problem 4, we do a long simulation in order to see w
 
 \subsection{\texttt{Task5/main.c}}
 \lstinputlisting[language=c, numbers=left]{../code/Task5/main.c}
-
 
 \end{document}

@@ -9,7 +9,7 @@ x = cos(angle_diff);
 plot(bin(1:end-1),h)
 axis([-1 1 0 1])
 
-xlabel('$x = \cos \theta$','interpreter','latex', 'fontsize', 15)
-ylabel('$P(x)$','interpreter','latex', 'fontsize', 15)
+xlabel('$x = \cos \theta$','interpreter','latex', 'fontsize', 19)
+ylabel('$P(x)$','interpreter','latex', 'fontsize', 19)
 title('Distribution of $\Delta \theta$ for the electrons',...
-    'interpreter','latex', 'fontsize', 15)
+    'interpreter','latex', 'fontsize', 19)
