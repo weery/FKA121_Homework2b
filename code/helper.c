@@ -83,16 +83,25 @@ double calc_var(double* arr, int N)
 // Calcultes the correlation length of the data
 double auto_correlation(double* data, int N)
 {
+    FILE* auto_file;
+    auto_file = fopen("auto_correlation.dat","w");
     double decay_value = exp(-2);
     double current_decay = 1;
     int k = 0;
-    while (1)
+    int auto_corr=0;
+    fprintf(auto_file, "%i \t %e \n",k, current_decay);
+    while (k < 20)
     {
         current_decay = calc_auto_corr(data, N, ++k);
-        if (current_decay < decay_value)
-            break;
+        if (current_decay < decay_value && auto_corr ==0)
+        {
+            auto_corr=k;
+        }
+        fprintf(auto_file, "%i \t %e \n",k, current_decay);
     }
-    return k;
+    fclose(auto_file);
+    free(auto_file);
+    return auto_corr;
 }
 
 

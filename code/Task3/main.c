@@ -190,8 +190,6 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
 
         double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f,nbr_of_dimensions);
 
-
-        double r = randq();
         if (relative_prob > 1)
         {
             memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));

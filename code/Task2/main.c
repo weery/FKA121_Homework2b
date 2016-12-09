@@ -59,9 +59,6 @@ int main()
     block_error_estimates(&energy[nbr_of_trials_eq], block_error_estimate, nbr_of_trials-nbr_of_trials_eq, nbr_of_block_trials);
     double s2= auto_correlation(&energy[nbr_of_trials_eq],nbr_of_trials-nbr_of_trials_eq);
 
-    printf("%.f\n", s2 );
-    
-
     // ------ Print results to file -------
     // ------------------------------------
     FILE* file;
@@ -161,7 +158,6 @@ void  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(do
 
         double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,f,nbr_of_dimensions);
 
-        double r = randq();
         if (relative_prob > 1)
         {
             memcpy(r_1, r_1_new, nbr_of_dimensions*sizeof(double));
