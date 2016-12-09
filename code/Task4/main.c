@@ -66,7 +66,6 @@ int main()
         double min_alpha= 100;
         double min_energy = 100;
         double beta = beta_min+(beta_max-beta_min)*(double)(b)/(double)(nbr_of_beta_runs);
-        printf("beta: %e \n",beta );
         for (int i = 0; i < nbr_of_runs; i++)
         {
             double current_alpha = alpha_0;
