@@ -27,7 +27,8 @@ int main()
     // Initialize the gsl random number generator
     Initialize_Generator();
 
-    // Variables
+    // ---- Variable Declarations ----
+    // -------------------------------
     double h_bar;
     double e;
     double m_e;
@@ -38,18 +39,21 @@ int main()
     int nbr_of_trials_eq    = nbr_of_trials/10;
     int nbr_of_runs         = 10;
 
-
     double* rads            = (double*)malloc(nbr_of_trials*2*sizeof(double));
     double* angle_diff      = (double*)malloc(nbr_of_trials*sizeof(double));
 
-    // Initialize Variables
-    h_bar   = 1;
-    e       = 1;
-    m_e     = 1;
-    e4pi    = 1;
+
+    // ---- Initialize Variables ----
+    // ------------------------------
+    h_bar   = 1.0;
+    e       = 1.0;
+    m_e     = 1.0;
+    e4pi    = 1.0;
     alpha   = 0.1430705;
 
-    double sum=0;
+
+    // ======== MONTE CARLO SIMULATION ========
+    double sum = 0.0;
     for (int i = 0; i < nbr_of_runs; i++)
     {
         double monte = montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha);
@@ -125,12 +129,12 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
 
-    r_1[1]=1;
-    r_1[2]=0;
-    r_1[3]=0;
-    r_2[1]=-1;
-    r_2[2]=0;
-    r_2[3]=0;
+    r_1[1] = 1.0;
+    r_1[2] = 0.0;
+    r_1[3] = 0.0;
+    r_2[1] = -1.0;
+    r_2[2] = 0.0;
+    r_2[3] = 0.0;
 
     double* energy = malloc(sizeof(double)*(N-equilibrium_time));
 
@@ -144,6 +148,7 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
         memcpy(r_1_new, r_1, nbr_of_dimensions*sizeof(double));
         memcpy(r_2_new, r_2, nbr_of_dimensions*sizeof(double));
 
+        // Generate a new configuration
         new_configuration(r_1_new, r_2_new);
 
 
@@ -169,7 +174,7 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
 
 
 
-    double mean_energy =calc_mean(energy,N-equilibrium_time);
+    double mean_energy = calc_mean(energy,N-equilibrium_time);
 
     free (energy);
 
@@ -178,6 +183,6 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
 
 double density_probability(double r, double Z)
 {
-    double prob=pow(Z,3)*4*pow(r,2)*exp(-2*Z*r);
+    double prob = pow(Z,3)*4*pow(r,2)*exp(-2*Z*r);
     return prob;
 }

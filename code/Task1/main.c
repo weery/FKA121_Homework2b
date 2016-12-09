@@ -27,7 +27,8 @@ int main()
     // Initialize the gsl random number generator
     Initialize_Generator();
 
-    // Variables
+    // ---- Variable Declarations ----
+    // -------------------------------
     double h_bar;
     double e;
     double m_e;
@@ -40,17 +41,23 @@ int main()
     double* rads            = (double*)malloc(nbr_of_trials*2*sizeof(double));
     double* angle_diff      = (double*)malloc(nbr_of_trials*sizeof(double));
 
-    // Initialize Variables
+
+    // ---- Initialize Variables ----
+    // ------------------------------
     h_bar   = 1;
     e       = 1;
     m_e     = 1;
     e4pi    = 1;
     alpha   = 0.1;
 
-    double monte = montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha,rads,angle_diff);
 
+    // ===== RUN MONTE CARLO SIMULATION =====
+    double monte = montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha,rads,angle_diff);
+    // ---- Print energy result -----
     printf("E_0: %e \n", monte );
 
+
+    // ====== PRINT SIMULATION RESULTS TO FILE ======
     FILE* file;
     file = fopen("rads.dat","w");
     for (int i = 0; i < 2*(nbr_of_trials-nbr_of_trials_eq); i++)
@@ -132,12 +139,12 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
     double r_2[nbr_of_dimensions] = { 0 };
     int rejects = 0;
 
-    r_1[1]=1;
-    r_1[2]=0;
-    r_1[3]=0;
-    r_2[1]=-1;
-    r_2[2]=0;
-    r_2[3]=0;
+    r_1[1] = 1.0;
+    r_1[2] = 0.0;
+    r_1[3] = 0.0;
+    r_2[1] = -1.0;
+    r_2[2] = 0.0;
+    r_2[3] = 0.0;
 
     double* energy = malloc(sizeof(double)*(N-equilibrium_time));
 
@@ -151,6 +158,7 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
         memcpy(r_1_new, r_1, nbr_of_dimensions*sizeof(double));
         memcpy(r_2_new, r_2, nbr_of_dimensions*sizeof(double));
 
+        // Generate a new configuration
         new_configuration(r_1_new, r_2_new);
 
 

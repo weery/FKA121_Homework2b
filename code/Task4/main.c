@@ -26,7 +26,8 @@ int main()
     // Initialize the gsl random number generator
     Initialize_Generator();
 
-    // Variables
+    // ---- Variable Declarations ----
+    // -------------------------------
     double h_bar;
     double e;
     double m_e;
@@ -47,15 +48,18 @@ int main()
     #define alpha_p(i,a,p,b) (alpha_p_arr[b*max_p*2*nbr_of_beta_runs+i*max_p*2+a*max_p+p])
     double* alpha_p_arr = (double*)malloc(nbr_of_beta_runs*2*max_p*nbr_of_runs*sizeof(double));
 
-    // Initialize Variables
-    h_bar   = 1;
-    e       = 1;
-    m_e     = 1;
-    e4pi    = 1;
-    alpha_0 = 0.1;
-    A       = 1;
+
+    // ---- Initialize Variables ----
+    // ------------------------------
+    h_bar       = 1.0;
+    e           = 1.0;
+    m_e         = 1.0;
+    e4pi        = 1.0;
+    alpha_0     = 0.1;
+    A           = 1.0;
     beta_min    = 0.50;
     beta_max    = 1.0;
+
 
     for (int b = 0; b < nbr_of_beta_runs; b++)
     {
@@ -89,6 +93,9 @@ int main()
         }
     }
 
+
+    // ----- Print results to file -----
+    // ---------------------------------
     FILE* file;
 
     file = fopen("alpha.dat","w");
@@ -184,6 +191,7 @@ void montecarlo_E_trial(int N ,int equilibrium_time,double (*local_e)(double*,do
         memcpy(r_1_new, r_1, nbr_of_dimensions*sizeof(double));
         memcpy(r_2_new, r_2, nbr_of_dimensions*sizeof(double));
 
+        // Generate new configuration
         new_configuration(r_1_new, r_2_new);
 
         double relative_prob = relative_probability(r_1_new,r_2_new,r_1,r_2,alpha,prob,nbr_of_dimensions);
@@ -213,9 +221,9 @@ void montecarlo_E_trial(int N ,int equilibrium_time,double (*local_e)(double*,do
     free(energy);
     free(grad_trial);
 
-    out[0]=mean_energy;
-    out[1]=mean_grad_trial;
-    out[2]=mean_grad_trial_energy;
+    out[0] = mean_energy;
+    out[1] = mean_grad_trial;
+    out[2] = mean_grad_trial_energy;
 }
 
 double density_probability(double r, double Z)

@@ -3,7 +3,7 @@
 \input{settings}
 
 \title{H2b: Variational Monte Carlo}
-\author{Victor Nilsson and Simon Nilsson}
+\author{Victor Nilsson and Simon Nilsson (930128-1854)}
 \date{\today}
 
 \begin{document}
@@ -12,38 +12,30 @@
 
 \section*{Introduction}
 
-In quantum mechanics we often have a Hamiltonian $\mathbf{H}$ that describes the energy of the studied system. Given a wave function $\psi$, the corresponding energy for that state is given by,
-
+In quantum mechanics we often have a Hamiltonian operator $\mathbf{H}$ that describes the energy of the studied system. Given a wave function $\psi$, the corresponding energy for that state is given by,
 \begin{equation}
 E=\frac{\left<\psi|\mathbf{H}|\psi\right>}{\left<\psi|\psi\right>}.
 \end{equation}
 
 For the Hamiltonian we have a corresponding ground state energy $E_0$ which is the lowest energy possible. The wave function $\psi_0$ that represents this lowest energy is often not known and a trial wave function $\phi$ is guessed. For any such $\phi \neq \psi_0$, the energy given by the Hamiltonian will always be larger than the ground state energy, $E \geq E_0$. For the next few problems we want to study the Hamiltonian describing the energy of a helium atom with two electrons. This Hamiltonian, neglecting fine structure, have the following form,
-
 \begin{equation}
 \mathbf{H}=-\frac{\hbar}{2m_e}\left(\nabla_1^2+\nabla_2^2\right)-\frac{e^2}{4\pi \epsilon_0}\left(\frac{2}{r_1}+\frac{2}{r_2}-\frac{1}{|r_1-r_2|}\right),
 \end{equation} 
-
-where $m_e$ is the mass of a electron, $e$ is the elementary charge, $\hbar$ is the reduced Planck constant, $\epsilon_0$ is the vacuum permittibility, $r_1$ and $r_2$ are the distances of the two electrons from the nucleus and the distance between these are $|\mathbf{r}_1-\mathbf{r}_2|$. For simplicity we use atomic units, i.e. $\hbar=e=m=4\pi\epsilon=1$. We want to see how well the trial wave,
-
+where $m_e$ is the mass of a electron, $e$ is the elementary charge, $\hbar$ is the reduced Planck constant, $\epsilon_0$ is the vacuum permittibility, $r_1$ and $r_2$ are the distances of the two electrons from the nucleus and the distance between these is $|\mathbf{r}_1-\mathbf{r}_2|$. For simplicity we use atomic units, i.e. $\hbar=e=m=4\pi\epsilon=1$. We want to see how well the trial wave,
 \begin{equation}
-\psi_T(\mathbf{r_1},\mathbf{r_2})=e^{-2r_1}e^{-2r_2}e^{\frac{r_{12}}{2(1+\alpha r_{12})}},
+\psi_T(\mathbf{r_1},\mathbf{r_2})=e^{-2r_1}e^{-2r_2}e^{r_{12}/2(1+\alpha r_{12})},
 \end{equation}
 
 is compared to the unknown ground state wave function $\psi_0$, where $\alpha$ is a parameter to be optimized. To calculate the energy for this trial wave we need to integrate over the whole physical line in 6 dimensions. This cannot be done analytically and we need to use numerical approximation methods to evaluate the integral. We will use the variational Monte Carlo method using the Metropolis algorithm. For each state $(\mathbf{r_1},\mathbf{r_2})$ we thus have the \textit{local energy},
-
 \begin{equation}
 E_{L}(\mathbf{r}_1,\mathbf{r}_2)= \frac{\mathbf{H}\psi_L(\mathbf{r}_1,\mathbf{r}_2)}{\psi_L(\mathbf{r}_1,\mathbf{r}_2)}
 \end{equation}
-
 and the normalised probability to be in this state is,
-
 \begin{equation}
 \rho(\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}{\int dr_1dr_2|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}.
 \end{equation}
 
 This probability will never be calculated directly as we only need the relative probabilities from the current state to a new state,
-
 \begin{equation}
 \rho_{rel}(\mathbf{r'}_1,\mathbf{r'}_2,\mathbf{r}_1,\mathbf{r}_2)=\frac{|\psi_L(\mathbf{r'}_1,\mathbf{r}_2')|^2}{|\psi_L(\mathbf{r}_1,\mathbf{r}_2)|^2}.
 \end{equation}
@@ -75,7 +67,7 @@ Transforming these sample points to spherical coordinates we can study the corre
 	x = \cos \left|\theta_1 - \theta_2\right| \Rightarrow P(x) = \frac{1}{2},\quad -1 < x < 1.
 \end{equation}
 
-From the variational Monte Carlo we obtain the result in Fig.~\ref{fig:RDF}. This indicates a clear correlation where the $\theta$ coordinate of the electrons tends to be approximately the same. At least a slight correlation is expected, however whether it should be this strongly correlated or not, we do not know.
+From the variational Monte Carlo we obtain the result in Fig.~\ref{fig:RDF}. This indicates a clear correlation where the electrons tend to be approximately the close together. At least a slight correlation is expected, however whether it should be this strongly correlated or not, we do not know.
 
 \section*{Problem 2}
 
@@ -94,9 +86,9 @@ From the variational Monte Carlo we obtain the result in Fig.~\ref{fig:RDF}. Thi
 	\label{fig:block_error}
 \end{figure}
 
-In order for the Metropolis algorithm to yield good and accurate results we need the system to run for a time in order to reach statistically likely configurations as the initial condition might be very unlikely. We can see in Fig. \ref{fig:block_error}(left) that we need discard $\approx10^4$ trials. For the remainder of the tasks we go well beyond this number, we take one tenth of the total trials as equilibration, to really make sure we reach a good statistically likely Markov chain.\\
+In order for the Metropolis algorithm to yield good and accurate results we need the system to run for a time in order to reach statistically likely configurations as the initial condition might be very unlikely. We can see in Fig. \ref{fig:block_error}(left) that we need discard $\approx10^4$ trials. For the remainder of the tasks we go well beyond this number, we take one tenth of the total trials as equilibration, to really make sure we reach a good statistically likely Markov chain.
 
-When we know where to start our simulation we need to know how correlated the trial data is in order to receive accurate statistics. If we take the energy in each time-step we would like to know it's statistical inefficiency. This calculation is done in two ways to show our results are rigorous, first by considering blocks of different lengths and calculate the correlation of the data in these blocks, and secondly by calculating the auto-correlation function.\\
+When we know where to start our simulation we need to know how correlated the trial data is in order to receive accurate statistics. If we take the energy in each time-step we would like to know it's statistical inefficiency. This calculation is done in two ways to show our results are rigorous, first by considering blocks of different lengths and calculate the correlation of the data in these blocks, and secondly by calculating the auto-correlation function.
 
 The results for using the block length can be seen in Fig.\ref{fig:block_error}(right) and we see that it stagnates around 11 for about 200 in block length. The statistical inefficiency using the auto-correlation was also 11.
 
@@ -126,25 +118,18 @@ In order to determine the best value of the variational parameter $\alpha$, we r
 \section*{Problem 4}
 
 Instead of guessing the optimal $\alpha$ we can instead use a damped steepest decent to reach a local minimum for the $\alpha$. Here we use the update rule in the method,
-
 \begin{equation}
 \alpha_{p+1} = \alpha_p-\gamma_p \nabla_\alpha E(\alpha_p)
 \end{equation} 
-
 where the damping coefficient,
-
 \begin{equation}
 \gamma_p=Ap^{-\beta},
 \end{equation}
-
 with $A=1$ and $0.5\leq\beta < 1$. The gradient $\nabla_\alpha E(\alpha)$ is calculated to,
-
 \begin{equation}
 \nabla_\alpha E(\alpha) = 2\left[\left<E_L(\mathcal{R})\nabla_\alpha \ln{\psi_T(\mathcal{R})}\right>-\left<E_L(\mathcal{R})\right>\left<\nabla_\alpha\ln{\psi_T(\mathcal{R})}\right>\right]
 \end{equation}
-
 where $\mathcal{R}$ is the electron state configurations and the averages are calculated in the ordinary Metropolis algorithm. The gradient on the $wave function $ is,
-
 \begin{equation}
 \nabla_\alpha \ln{\psi_T(\mathcal{R})} = -\frac{r_{12}^2}{2(1+\alpha r_{12})^2}.
 \end{equation}
