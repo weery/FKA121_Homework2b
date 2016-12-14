@@ -36,7 +36,7 @@ int main()
     double alpha;
 
     int nbr_of_trials       = 10000000;
-    int nbr_of_trials_eq    = 15000;
+    int nbr_of_trials_eq    = 1000;
     int nbr_of_runs         = 1000;
 
     double* rads            = (double*)malloc(nbr_of_trials*2*sizeof(double));
@@ -49,7 +49,7 @@ int main()
     e       = 1.0;
     m_e     = 1.0;
     e4pi    = 1.0;
-    alpha   = 0.1430705;
+    alpha   = 0.1431064;
 
 
     // ======== MONTE CARLO SIMULATION ========

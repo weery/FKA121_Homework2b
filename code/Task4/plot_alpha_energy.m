@@ -32,15 +32,16 @@ hold on
 for k = 1:4
     startIdx=(k-1)*200+1;
     endIdx = k*200;
-    plot(alpha_energy(startIdx:endIdx,idx(k)))
-    plot(tot_min_idx(k),alpha_energy(tot_min_idx(k),idx(k)),'*')
+    startShift=0;
+    plot(startShift+1:200,alpha_energy(startIdx+startShift:endIdx,idx(k)))
 end
 
 xlabel('Run $p$ [$\#$]','interpreter','latex','fontsize',19)
 ylabel('$\alpha$ [$\#$]','interpreter','latex','fontsize',19)
 title('Estimation of $\alpha$ which yeild lowest energy','interpreter','latex','fontsize',19)
+xlim([startShift, 200])
 
 figure
-plot(alpha_energy(:,idx+1))
+plot(alpha_energy(10:end,idx+1))
 hold on
 plot(tot_min_idx,alpha_energy(tot_min_idx,idx+1),'*')

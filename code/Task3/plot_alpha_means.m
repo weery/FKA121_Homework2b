@@ -4,7 +4,8 @@ alpha_mean_var=importdata('alpha_mean_var.dat');
 
 %plot(alpha_mean_var(:,1),alpha_mean_var(:,2))
 hold on
-errorbar(alpha_mean_var(:,1),alpha_mean_var(:,2),alpha_mean_var(:,3)*sqrt(11/1000000))
+% error bar is sqrt of (variance times*s/nbr_of_trials)
+errorbar(alpha_mean_var(:,1),alpha_mean_var(:,2),sqrt(alpha_mean_var(:,3)*11/1000000))
 
 xlim([alpha_mean_var(1,1),alpha_mean_var(end,1)])
 

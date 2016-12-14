@@ -43,7 +43,7 @@ int main()
     double alpha_max;
 
     int nbr_of_alpha_trials =   25;
-    int nbr_of_trials_eq    =   15000;
+    int nbr_of_trials_eq    =   1000;
     int nbr_of_runs         =   100;
 
     #define energy(i,j)  (energy_arr[j*nbr_of_alpha_trials+i])
@@ -171,6 +171,13 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
 {
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
+
+    r_1[1] = 1.0;
+    r_1[2] = 0.0;
+    r_1[3] = 0.0;
+    r_2[1] = -1.0;
+    r_2[2] = 0.0;
+    r_2[3] = 0.0;
 
     double* energy = malloc(sizeof(double)*(N-equilibrium_time));
 

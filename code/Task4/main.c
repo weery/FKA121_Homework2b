@@ -40,8 +40,8 @@ int main()
     double beta_max;
 
     int nbr_of_trials       =   100000;
-    int nbr_of_trials_eq    =   15000;
-    int max_p               =   200;
+    int nbr_of_trials_eq    =   1000;
+    int max_p               =   00;
     int nbr_of_runs         =   10;
     int nbr_of_beta_runs    =   4;
 
@@ -55,7 +55,7 @@ int main()
     e           = 1.0;
     m_e         = 1.0;
     e4pi        = 1.0;
-    alpha_0     = 0.1;
+    alpha_0     = 0.15;
     A           = 1.0;
     beta_min    = 0.50;
     beta_max    = 1.0;
@@ -66,7 +66,6 @@ int main()
         double min_alpha= 100;
         double min_energy = 100;
         double beta = beta_min+(beta_max-beta_min)*(double)(b)/(double)(nbr_of_beta_runs);
-        printf("%e\n", beta );
         for (int i = 0; i < nbr_of_runs; i++)
         {
             double current_alpha = alpha_0;
@@ -177,6 +176,13 @@ void montecarlo_E_trial(int N ,int equilibrium_time,double (*local_e)(double*,do
 {
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
+
+    r_1[1] = 1.0;
+    r_1[2] = 0.0;
+    r_1[3] = 0.0;
+    r_2[1] = -1.0;
+    r_2[2] = 0.0;
+    r_2[3] = 0.0;
 
     double* energy              = malloc(sizeof(double)*(N-equilibrium_time));
     double* grad_trial          = malloc(sizeof(double)*(N-equilibrium_time));

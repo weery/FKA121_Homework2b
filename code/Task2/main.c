@@ -140,7 +140,7 @@ void  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(do
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
 
-    // Start far away from probable state
+    // Start at a probable state to remove the necessity of long equilibration run 
     r_1[0] = 1;
     r_1[1] = 0;
     r_1[2] = 0;

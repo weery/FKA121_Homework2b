@@ -7,7 +7,7 @@ var_alpha = var(alpha_energy(:,2:end),0,2);
 
 plot(alpha_energy(:,1),mean_alpha)
 
-% not necessarily right
+% error bar is variance times sqrt of (1/nbr_of_trials)
 errorbar(alpha_energy(:,1),mean_alpha,var_alpha*100)
 
 hold on

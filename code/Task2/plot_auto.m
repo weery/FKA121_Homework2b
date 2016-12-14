@@ -4,7 +4,7 @@ data = importdata('auto_correlation.dat');
 
 plot(data(:,1), data(:,2))
 hold on
-plot(data(11,1),data(11,2),'r*')
+plot(data(12,1),data(12,2),'r*')
 
 xlabel('VET INTE VAD SOM SKA STÅ HÄR JUST NU','interpreter','latex','fontsize',19)
 ylabel('VET INTE VAD SOM SKA STÅ HÄR JUST NU','interpreter','latex','fontsize',19)

@@ -90,15 +90,21 @@ The mean energy obtained with variational Monte Carlo was -2.877 in Hartree atom
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task2/block_error.png}
 	\end{subfigure}
-	\caption{\textit{Left:} The estimation of the ground state energy $E_0$ for different number of trials without equilibration, there is not much deviation in the energy for $\approx10^4$ trials. \textit{Right:} Estimation of the statistical inefficiency based on different block lengths. After the length of about 200 we can see that the statistical inefficiency $s$ deviates around 11 and starts to go slightly down for higher lengths.}
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{graphics/task2/auto_corr.png}
+	\end{subfigure}
+	\caption{\textit{Left:} The estimation of the ground state energy $E_0$ for different number of trials without equilibration, there is no apparent drift in the local energy. \textit{Right:} Estimation of the statistical inefficiency based on different block lengths. After the length of about 200 we can see that the statistical inefficiency $s$ deviates around 11 and starts to go slightly down for higher lengths. SÅ BEHÖVER VI ÄNDRA LITE PÅ TEXTEN HÄR NÄR VI FÅTT RÄTT LAYOUT. }
 	\label{fig:block_error}
 \end{figure}
 
-In order for the Metropolis algorithm to yield good and accurate results we need the system to run for a time in order to reach statistically likely configurations as the initial condition might be very unlikely. We can see in Fig. \ref{fig:block_error}(left) that we need discard $\approx10^4$ trials. For the remainder of the tasks we go well beyond this number, we take one tenth of the total trials as equilibration, to really make sure we reach a good statistically likely Markov chain.
+In order for the Metropolis algorithm to yield good and accurate results we need the system to run for a time in order to reach statistically likely configurations as the initial condition might be very unlikely. As we can see in Fig. \ref{fig:block_error}(left) there is not much drift in the local energy over time, (though there is a lot of deviation between each trial, but the mean is about the same over the trials).
+
+We can see in Fig. \ref{fig:block_error}(left) that we need discard $\approx10^4$ trials. For the remainder of the tasks we go well beyond this number, we take one tenth of the total trials as equilibration, to really make sure we reach a good statistically likely Markov chain.
 
 When we know where to start our simulation we need to know how correlated the trial data is in order to receive accurate statistics. If we take the energy in each time-step we would like to know it's statistical inefficiency. This calculation is done in two ways to show our results are rigorous, first by considering blocks of different lengths and calculate the correlation of the data in these blocks, and secondly by calculating the auto-correlation function.
 
-The results for using the block length can be seen in Fig.\ref{fig:block_error}(right) and we see that it stagnates around 11 for about 200 in block length. The statistical inefficiency using the auto-correlation was also 11.
+The results for using the block length can be seen in Fig.\ref{fig:block_error}(right) and we see that it stagnates around 11 for about 200 in block length. The statistical inefficiency using the auto-correlation was also 11 which can be seen in Fig. \ref{fig:block_error} (WHERE????). (The auto-correlation is calculated to be when the decay of the correlation of the steps is below $e^-2$.)(RÄTT?).
 
 
 
