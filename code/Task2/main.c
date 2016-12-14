@@ -34,7 +34,7 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials       =   100000;
+    int nbr_of_trials       =   1000000;
     int nbr_of_block_trials =   1000;
 
     double* energy                = (double*)malloc(nbr_of_trials*sizeof(double));
@@ -55,10 +55,6 @@ int main()
     montecarlo(nbr_of_trials,local_energy, trial_wave, alpha,energy);
     printf("Monte Carlo simulaton done\n\n");
 
-    int nbr_of_trials_eq    =   15000;
-    block_error_estimates(&energy[nbr_of_trials_eq], block_error_estimate, nbr_of_trials-nbr_of_trials_eq, nbr_of_block_trials);
-    double s2= auto_correlation(&energy[nbr_of_trials_eq],nbr_of_trials-nbr_of_trials_eq);
-
     // ------ Print results to file -------
     // ------------------------------------
     FILE* file;
@@ -68,6 +64,11 @@ int main()
         fprintf(file, "%e\n", energy[i] );
     }
     fclose(file);
+
+    int nbr_of_trials_eq    =   15000;
+    block_error_estimates(&energy[nbr_of_trials_eq], block_error_estimate, nbr_of_trials-nbr_of_trials_eq, nbr_of_block_trials);
+    double s2= auto_correlation(&energy[nbr_of_trials_eq],nbr_of_trials-nbr_of_trials_eq);
+
 
     file = fopen("block_length.dat","w");
     for (int i = 0; i < nbr_of_block_trials; i++)
@@ -139,8 +140,13 @@ void  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(do
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
 
-    r_1[1] = 0.1;
-    r_2[1] = -0.1;
+    // Start far away from probable state
+    r_1[0] = 1;
+    r_1[1] = 0;
+    r_1[2] = 0;
+    r_2[0] = -1;
+    r_2[1] = 0;
+    r_2[2] = 0;
 
     for (int i = 0; i < N; i++)
     {
