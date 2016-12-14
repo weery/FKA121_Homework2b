@@ -40,7 +40,7 @@ int main()
     double beta_max;
 
     int nbr_of_trials       =   100000;
-    int nbr_of_trials_eq    =   30000;
+    int nbr_of_trials_eq    =   15000;
     int max_p               =   200;
     int nbr_of_runs         =   10;
     int nbr_of_beta_runs    =   4;
@@ -66,6 +66,7 @@ int main()
         double min_alpha= 100;
         double min_energy = 100;
         double beta = beta_min+(beta_max-beta_min)*(double)(b)/(double)(nbr_of_beta_runs);
+        printf("%e\n", beta );
         for (int i = 0; i < nbr_of_runs; i++)
         {
             double current_alpha = alpha_0;

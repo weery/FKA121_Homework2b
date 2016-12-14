@@ -13,6 +13,7 @@
 \section*{Introduction}
 
 In quantum mechanics we often have a Hamiltonian operator $\mathbf{H}$ that describes the energy of the studied system. Given a wave function $\psi$, the corresponding energy for that state is given by,
+
 \begin{equation}
 E=\frac{\left<\psi|\mathbf{H}|\psi\right>}{\left<\psi|\psi\right>}.
 \end{equation}
@@ -69,7 +70,7 @@ From these sample points we can also study the correlation of the angle between 
 
 The variational Monte Carlo yields the results in Fig.~\ref{fig:RDF} (right). This indicates a clear correlation where the electrons tend to be approximately on the opposite side of the nucleus. At least a slight correlation is expected, however whether it should be this strongly correlated or not, we do not know.
 
-The mean energy obtained with variational Monte Carlo was -2.876908 in Hartree units.
+The mean energy obtained with variational Monte Carlo was -2.877 in Hartree units.
 
 
 \section*{Problem 2}
@@ -139,11 +140,25 @@ where $\mathcal{R}$ is the electron state configurations and the averages are ca
 
 Using this method, and with $\beta = 0.75$ we find that the minimum energy to be $E_{min}=-2.891$ with the corresponding $\alpha$ as $\alpha_{min}=0.1426$. This found $\alpha$ lies between the two results gained in Problem 3.
 
-% TODO: more betas, beta graph
+\begin{table}[H]
+	\centering
+	\caption{Put some capton here.}
+	\begin{tabular}{|l|cc|}
+		\hline $\beta$ & $\alpha$ & $Energy_{min}$ \\ \hline
+		 0.5 & 0.1434688 & -2.893317 \\ \hline
+		 0.625 & 0.1434688 & -2.893317 \\ \hline
+		 0.75 & 0.1431064 & -2.892874 \\ \hline
+		 0.875 & 0.1427814 & -2.893997 \\ \hline
+	\end{tabular}
+	\label{tab:prob5}
+\end{table}
+
 
 \section*{Problem 5}
 
 Using the $\alpha$ found in Problem 4, we do a long simulation in order to see what value we receive. We find our energy to be, $E_{min}=-2.878223$ which lies between the Hartree value $\unit[-2.862]{a.u.}$ and the experimental number $\unit[-2.9033]{a.u.}$
+
+$Mean = -2.878153, var = 1.275041E-7$
 
 
 \bibliography{references}

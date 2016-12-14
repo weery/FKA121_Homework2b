@@ -137,7 +137,6 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
 {
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
-    int rejects = 0;
 
     r_1[1] = 1.0;
     r_1[2] = 0.0;
@@ -184,7 +183,7 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
             rads[2*(i-equilibrium_time)+1] = R2;
 
             /* Compute angle between vectors with scalar product */
-            angle_diff[i-equilibrium_time] = 
+            angle_diff[i-equilibrium_time] =
                 acos( (r_1[0]*r_2[0] + r_1[1]*r_2[1] + r_1[2]*r_2[2]) / (R1*R2) );
             /* Compute local energy */
             energy[i-equilibrium_time] = local_e(r_1,r_2,alpha);
@@ -196,8 +195,6 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
     double mean_energy =calc_mean(energy,N-equilibrium_time);
 
     free (energy);
-
-    printf("Estimated rejection prob. : %f\n", (double)rejects/N);
 
     return mean_energy;
 }

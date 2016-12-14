@@ -43,7 +43,7 @@ int main()
     double alpha_max;
 
     int nbr_of_alpha_trials =   25;
-    int nbr_of_trials_eq    =   nbr_of_trials/10;
+    int nbr_of_trials_eq    =   15000;
     int nbr_of_runs         =   100;
 
     #define energy(i,j)  (energy_arr[j*nbr_of_alpha_trials+i])

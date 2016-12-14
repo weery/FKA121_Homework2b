@@ -17,7 +17,7 @@
 double  trial_wave(double*, double*, double);
 double  local_energy(double*, double*, double);
 void    new_configuration(double *, double*);
-double  montecarlo(int ,int ,double(), double(), double);
+void  montecarlo(int ,int ,double(), double(), double, double*);
 double  density_probability(double,double);
 
 // MAIN PROGRAM
@@ -36,8 +36,8 @@ int main()
     double alpha;
 
     int nbr_of_trials       = 10000000;
-    int nbr_of_trials_eq    = nbr_of_trials/10;
-    int nbr_of_runs         = 10;
+    int nbr_of_trials_eq    = 15000;
+    int nbr_of_runs         = 1000;
 
     double* rads            = (double*)malloc(nbr_of_trials*2*sizeof(double));
     double* angle_diff      = (double*)malloc(nbr_of_trials*sizeof(double));
@@ -53,16 +53,21 @@ int main()
 
 
     // ======== MONTE CARLO SIMULATION ========
-    double sum = 0.0;
+    double* energy = malloc(sizeof(double)*(nbr_of_trials-nbr_of_trials_eq));
+    double* mean_energy = malloc(sizeof(double)*nbr_of_runs);
     for (int i = 0; i < nbr_of_runs; i++)
     {
-        double monte = montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha);
-        sum+=monte;
+        montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha,energy);
+        mean_energy[i] = calc_mean(energy,nbr_of_trials-nbr_of_trials_eq);
     }
-    sum /= nbr_of_runs;
+    double mean_energy_tot = calc_mean(mean_energy,nbr_of_runs);
+    double var_energy_tot = calc_var(mean_energy,nbr_of_runs);
 
-    printf("E_0: %e \n", sum);
+    printf("E_0: %e \n", mean_energy_tot);
+    printf("Var: %e \n", var_energy_tot );
 
+    free (energy);
+    free (mean_energy);
     // Free the gsl random number generator
     Free_Generator();
     return 0;
@@ -124,7 +129,7 @@ void new_configuration(double * r_1, double* r_2)
 }
 
 
-double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*,double), double (*f)(double*,double*,double), double alpha)
+void  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*,double), double (*f)(double*,double*,double), double alpha, double* energy)
 {
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
@@ -136,7 +141,6 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
     r_2[2] = 0.0;
     r_2[3] = 0.0;
 
-    double* energy = malloc(sizeof(double)*(N-equilibrium_time));
 
     for (int i = 0; i < N; i++)
     {
@@ -171,14 +175,6 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
             energy[i-equilibrium_time] = local_e(r_1,r_2,alpha);
         }
     }
-
-
-
-    double mean_energy = calc_mean(energy,N-equilibrium_time);
-
-    free (energy);
-
-    return mean_energy;
 }
 
 double density_probability(double r, double Z)
