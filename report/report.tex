@@ -63,14 +63,18 @@ In this problem we studied a He atom using the variational Monte Carlo method wi
 
 From the obtained sample points, a radial probability distribution function could be approxiated, which can be seen in Fig.~\ref{fig:RDF} (left). Comparing the result to the variationally optimized distribution and the central field approximation result we conclude that that the results are the same as the variationally optimized distribution and that the method is working properly. This effect is due to screening, causing the effective nucleus charge to be lower than the actual charge.
 
-From these sample points we can also study the correlation of the angle between the two electrons, $\theta$. As stated in \cite{probdesc}, if they are uncorrelated, i.e. equally distributed over the unit sphere, then the probability distribution would be $P(\theta) = \sin \theta / 2$ for $0 < \theta < \pi$, or
+From these sample points we can also study the correlation of the angle between the two electrons, $\theta$. We obtain $\theta$ by using the relation
+\begin{equation}
+\theta = \arccos \left( \frac{\mathbf{r}_1 \cdot \mathbf{r}_2}{|\mathbf{r}_1| |\mathbf{r}_2|} \right).
+\end{equation}
+As stated in \cite{probdesc}, if they are uncorrelated, i.e. equally distributed over the unit sphere, then the probability distribution would be $P(\theta) = \sin \theta / 2$ for $0 < \theta < \pi$, or
 \begin{equation}
 	x = \cos \theta \Rightarrow P(x) = \frac{1}{2},\quad -1 < x < 1.
 \end{equation}
 
 The variational Monte Carlo yields the results in Fig.~\ref{fig:RDF} (right). This indicates a clear correlation where the electrons tend to be approximately on the opposite side of the nucleus. At least a slight correlation is expected, however whether it should be this strongly correlated or not, we do not know.
 
-The mean energy obtained with variational Monte Carlo was -2.877 in Hartree units.
+The mean energy obtained with variational Monte Carlo was -2.877 in Hartree atomic units. The results from mean-field approximation, for unscreened and screened nucleus respectively, are -2.75 and -2.85 atomic units. We see that the results are similar and that the one obtained with variational MC is even lower than the others and is therefore probably closer to the ground-state energy for Helium.
 
 
 \section*{Problem 2}
