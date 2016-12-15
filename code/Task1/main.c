@@ -58,6 +58,7 @@ int main()
 
 
     // ====== PRINT SIMULATION RESULTS TO FILE ======
+    printf("Im here\n");
     FILE* file;
     file = fopen("rads.dat","w");
     for (int i = 0; i < 2*(nbr_of_trials-nbr_of_trials_eq); i++)
@@ -66,12 +67,15 @@ int main()
     }
     fclose(file);
 
+    printf("Im here again\n");
     file = fopen("angle_diff.dat","w");
     for (int i = 0; i < nbr_of_trials-nbr_of_trials_eq; i++)
     {
         fprintf(file, "%e\n", angle_diff[i] );
     }
     fclose(file);
+
+    printf("Im here yet again\n");
     // Free the gsl random number generator
     Free_Generator();
     return 0;

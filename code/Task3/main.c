@@ -17,7 +17,7 @@ double  trial_wave(double*, double*, double);
 double  local_energy(double*, double*, double);
 void    new_configuration(double *, double*);
 double  montecarlo(int, int, double(), double(), double);
-double  montecarlo_energy_out(int, int, double(), double(), double, double*);
+void  montecarlo_energy_out(int, int, double(), double(), double, double*);
 double  density_probability(double,double);
 
 // MAIN PROGRAM
@@ -35,7 +35,7 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials       =   100000;
+    int nbr_of_trials       =   10000;
 
     // Task Specific parameters
     int s;
@@ -44,7 +44,7 @@ int main()
 
     int nbr_of_alpha_trials =   25;
     int nbr_of_trials_eq    =   1000;
-    int nbr_of_runs         =   10;
+    int nbr_of_runs         =   1000;
 
     #define energy(i,j)  (energy_arr[j*nbr_of_alpha_trials+i])
     double* energy_arr          =   (double*)malloc(nbr_of_alpha_trials*nbr_of_runs*sizeof(double));
@@ -62,49 +62,20 @@ int main()
 
     for (int i = 0; i < nbr_of_alpha_trials; i++)
     {
-        printf("i1: %i\n",i  );
         double x= (double)(i)/(nbr_of_alpha_trials-1);
         alpha = calc_alpha_exp(x,alpha_min,alpha_max);
         alpha=alpha_min+(alpha_max-alpha_min)*x;
-        printf("i2: %i\n",i  );
 
         double en_mean_var[2]={0};
-        printf("i3: %i\n",i  );
 
-        double current_energy = montecarlo_energy_out(nbr_of_trials*100,nbr_of_trials_eq,local_energy, trial_wave, alpha,en_mean_var);
-        energy(0,i)= current_energy;
+        montecarlo_energy_out(nbr_of_trials*1000,nbr_of_trials_eq,local_energy, trial_wave, alpha,en_mean_var);
         energy_mean_var[i*3+0]=alpha;
         energy_mean_var[i*3+1]=en_mean_var[0];
         energy_mean_var[i*3+2]=en_mean_var[1];
-        printf("i4: %i\n",i  );
-
-        for (int j = 1; j < nbr_of_runs; j++)
-        {
-            double current_energy = montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha);
-            energy(j,i)= current_energy;
-        }
-        printf("i5: %i\n",i  );
     }
-    printf("I Made the simulation\n");
 
 
-    // ----- Print results to file -----
-    // ---------------------------------
     FILE* file;
-
-    file = fopen("alpha_avg_energy.dat","w");
-    for (int i = 0; i < nbr_of_alpha_trials; i++)
-    {
-        alpha = alpha_min+(alpha_max-alpha_min)*(double)(i)/(double)(nbr_of_alpha_trials-1);
-        fprintf(file, "%e\t", alpha);
-        for (int j = 1; j < nbr_of_runs; j++)
-        {
-            fprintf(file,"%e \t", energy(j,i) );
-        }
-        fprintf(file, "\n");
-    }
-    fclose(file);
-
     file = fopen("alpha_mean_var.dat","w");
     for (int i = 0; i < nbr_of_alpha_trials; i++)
     {
@@ -112,9 +83,38 @@ int main()
     }
     fclose(file);
 
+    for (int i = 0; i < nbr_of_alpha_trials; i++)
+    {
+        double x= (double)(i)/(nbr_of_alpha_trials-1);
+        alpha = calc_alpha_exp(x,alpha_min,alpha_max);
+        alpha=alpha_min+(alpha_max-alpha_min)*x;
+        for (int j = 0; j < nbr_of_runs; j++)
+        {
+            double current_energy_2 = montecarlo(nbr_of_trials,nbr_of_trials_eq,local_energy, trial_wave, alpha);
+            energy(i,j)= current_energy_2;
+        }
+    }
+    // ----- Print results to file -----
+    // ---------------------------------
+    FILE* file2;
+    file2 = fopen("alpha_mean_var2.dat","w");
+    for (int i = 0; i < nbr_of_alpha_trials; i++)
+    {
+        alpha = alpha_min+(alpha_max-alpha_min)*(double)(i)/(double)(nbr_of_alpha_trials-1);
+        fprintf(file2, "%e\t", alpha);
+        for (int j = 0; j < nbr_of_runs; j++)
+        {
+            fprintf(file2,"%e \t", energy(i,j) );
+        }
+        fprintf(file2, "\n");
+    }
+    fclose(file2);
+
+
+
+
     free(energy_arr);
     free(energy_mean_var);
-    free(file);
     // Free the gsl random number generator
     Free_Generator();
     return 0;
@@ -227,13 +227,19 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
     return mean_energy;
 }
 
-double  montecarlo_energy_out(int N, int equilibrium_time,double (*local_e)(double*,double*,double), double (*f)(double*,double*,double), double alpha, double* energy_mean_var)
+void  montecarlo_energy_out(int N, int equilibrium_time,double (*local_e)(double*,double*,double), double (*f)(double*,double*,double), double alpha, double* energy_mean_var)
 {
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
 
     double* energy = malloc(sizeof(double)*(N-equilibrium_time));
 
+    r_1[0] = 1.0;
+    r_1[1] = 0.0;
+    r_1[2] = 0.0;
+    r_2[0] = -1.0;
+    r_2[1] = 0.0;
+    r_2[2] = 0.0;
 
     for (int i = 0; i < N; i++)
     {
@@ -264,8 +270,6 @@ double  montecarlo_energy_out(int N, int equilibrium_time,double (*local_e)(doub
     energy_mean_var[1] = calc_var(energy,N-equilibrium_time);
 
     free(energy);
-
-    return energy_mean_var[0];
 }
 
 
