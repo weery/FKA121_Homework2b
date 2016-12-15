@@ -47,21 +47,25 @@ This probability will never be calculated directly as we only need the relative 
 \begin{figure}[H]
     \centering
     \captionsetup[subfigure]{justification=centering}
-    \begin{subfigure}[b]{0.49\textwidth}
+    \begin{subfigure}[b]{0.7\textwidth}
         \centering
         \includegraphics[width=\textwidth]{graphics/task1/radius.png}
+		\caption{}
+		\label{fig:RDF_a}
     \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
+    \begin{subfigure}[b]{0.7\textwidth}
         \centering
         \includegraphics[width=\textwidth]{graphics/task1/angle_diff_dist.png}
+        \caption{}
+		\label{fig:RDF_b}
     \end{subfigure}
-    \caption{\textit{Left:} Simulated and calculated radial distribution function for the two electrons in the helium atom. \textit{Right:} The distribution of cosine of the angle $\theta$ between the two electrons.}
+    \caption{\textit{(a):} Simulated and calculated radial distribution function for the two electrons in the helium atom. \textit{(b):} The distribution of cosine of the angle $\theta$ between the two electrons.}
     \label{fig:RDF}
 \end{figure}
 
 In this problem we studied a He atom using the variational Monte Carlo method with the Metropolis algorithm. In the Metropolis algorithm a new trial state is obtained by randomly displacing both electrons in all three dimensions simultaneously. The displacement is bounded by a cube with side $d$, where $d$ is a simulation parameter which was chosen as $\unit[1]{\AA}$. Other equations used can be found in \cite{probdesc}.
 
-From the obtained sample points, a radial probability distribution function could be approxiated, which can be seen in Fig.~\ref{fig:RDF} (left). Comparing the result to the variationally optimized distribution and the central field approximation result we conclude that that the results are the same as the variationally optimized distribution and that the method is working properly. This effect is due to screening, causing the effective nucleus charge to be lower than the actual charge.
+From the obtained sample points, a radial probability distribution function could be approxiated, which can be seen in Fig.~\ref{fig:RDF_a}. Comparing the result to the variationally optimized distribution and the central field approximation result we conclude that that the results are the same as the variationally optimized distribution and that the method is working properly. This effect is due to screening, causing the effective nucleus charge to be lower than the actual charge.
 
 From these sample points we can also study the correlation of the angle between the two electrons, $\theta$. We obtain $\theta$ by using the relation
 \begin{equation}
@@ -72,7 +76,7 @@ As stated in \cite{probdesc}, if they are uncorrelated, i.e. equally distributed
 	x = \cos \theta \Rightarrow P(x) = \frac{1}{2},\quad -1 < x < 1.
 \end{equation}
 
-The variational Monte Carlo yields the results in Fig.~\ref{fig:RDF} (right). This indicates a clear correlation where the electrons tend to be approximately on the opposite side of the nucleus. At least a slight correlation is expected, however whether it should be this strongly correlated or not, we do not know.
+The variational Monte Carlo yields the results in Fig.~\ref{fig:RDF_b}. This indicates a clear correlation where the electrons tend to be approximately on the opposite side of the nucleus. At least a slight correlation is expected, however whether it should be this strongly correlated or not, we do not know.
 
 The mean energy obtained with variational Monte Carlo was -2.877 in Hartree atomic units. The results from mean-field approximation, for unscreened and screened nucleus respectively, are -2.75 and -2.85 atomic units. We see that the results are similar and that the one obtained with variational MC is even lower than the others and is therefore probably closer to the ground-state energy for Helium.
 
@@ -82,29 +86,35 @@ The mean energy obtained with variational Monte Carlo was -2.877 in Hartree atom
 \begin{figure}[H]
 	\centering
 	\captionsetup[subfigure]{justification=centering}
-	\begin{subfigure}[b]{0.49\textwidth}
+	\begin{subfigure}[b]{0.7\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task2/local_energy.png}
+		\caption{}
+		\label{fig:block_error_a}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.49\textwidth}
+	\begin{subfigure}[b]{0.7\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task2/block_error.png}
+		\caption{}
+		\label{fig:block_error_b}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.49\textwidth}
+	\begin{subfigure}[b]{0.7\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task2/auto_corr.png}
+		\caption{}
+		\label{fig:block_error_c}
 	\end{subfigure}
-	\caption{\textit{Left:} The estimation of the ground state energy $E_0$ for different number of trials without equilibration, there is no apparent drift in the local energy. \textit{Right:} Estimation of the statistical inefficiency based on different block lengths. After the length of about 200 we can see that the statistical inefficiency $s$ fluctuates around 11 and starts to go slightly down for higher lengths. This is caused by the amount of blocks for larger block sizes decreasing too much, in turn giving a less reliable estimate of $S$ S\AA{} BEH\"OVER VI \"ANDRA LITE P\AA{} TEXTEN HÄR NÄR VI F\AA{}TT R\"ATT LAYOUT. }
+	\caption{\textit{(a):} The estimation of the ground state energy $E_0$ for different number of trials without equilibration, there is no apparent drift in the local energy. \textit{(b):} Estimation of the statistical inefficiency based on different block lengths. After the length of about 200 we can see that the statistical inefficiency $s$ reaches and fluctuates around 11 and starts to fluctuate more for larger sizes. This is caused by the amount of blocks for larger block sizes decreasing too much, in turn giving a less reliable estimate of $s$. \textit{(c):} The decay of the auto-correlation function. The threshold $e^{-2}$ is also shown, where the statistical inefficiency is the $k$ for which $\Phi_k$ is less than the threshold.}
 	\label{fig:block_error}
 \end{figure}
 
-In order for the Metropolis algorithm to yield good and accurate results we need the system to run for a time in order to reach statistically likely configurations as the initial condition might be very unlikely. As we can see in Fig. \ref{fig:block_error}(left) there is not much drift in the local energy over time, (though there is a lot of deviation between each trial, but the mean is about the same over the trials).
+In order for the Metropolis algorithm to yield good and accurate results we need the system to run for a time in order to reach statistically likely configurations as the initial condition might be very unlikely. However, as we can see in Fig. \ref{fig:block_error_a} there is not much drift in the local energy over time. That that means that the initial configuration is a reasonable one. Despite this, just to be sure, we choose an equilibration time of 1000 timesteps.
 
-We can see in Fig. \ref{fig:block_error}(left) that we need discard $\approx10^4$ trials. For the remainder of the tasks we go well beyond this number, we take one tenth of the total trials as equilibration, to really make sure we reach a good statistically likely Markov chain.
+%We can see in Fig. \ref{fig:block_error_b} that we need to discard $\approx10^4$ trials. For the remainder of the tasks we go well beyond this number, we take one tenth of the total trials as equilibration, to really make sure we reach a good statistically likely Markov chain.
 
-When we know where to start our simulation we need to know how correlated the trial data is in order to receive accurate statistics. If we take the energy in each time-step we would like to know it's statistical inefficiency. This calculation is done in two ways to show our results are rigorous, first by considering blocks of different lengths and calculate the correlation of the data in these blocks, and secondly by calculating the auto-correlation function.
+To obtain accurate estimates of the error we compute the statistical inefficiency. This is done in two ways, first by considering block averaging using blocks of different sizes and calculate the correlation of the data in these blocks, and secondly by using the auto-correlation function.
 
-The results for using the block length can be seen in Fig.\ref{fig:block_error}(right) and we see that it stagnates around 11 for about 200 in block length. The statistical inefficiency using the auto-correlation was also 11 which can be seen in Fig. \ref{fig:block_error} (WHERE????). (The auto-correlation is calculated to be when the decay of the correlation of the steps is below $e^-2$.)(RÄTT?).
+The results for using the block size can be seen in Fig.\ref{fig:block_error_b} and we see that it fluctuates somewhere around 11. The statistical inefficiency obtained using the auto-correlation was also 11 which can be seen in Fig. \ref{fig:block_error_c}. The statistical inefficiency $s$ is calculated to be when the auto-correlation function has decayed past the threshold $\Phi_s < e^{-2}$.
 
 
 
@@ -115,19 +125,23 @@ The results for using the block length can be seen in Fig.\ref{fig:block_error}(
 \begin{figure}[H]
 	\centering
 	\captionsetup[subfigure]{justification=centering}
-	\begin{subfigure}[b]{0.49\textwidth}
+	\begin{subfigure}[b]{0.7\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task3/lowest_energy_indep_alpha.png}
+		\caption{}
+		\label{fig:optimize_alpha_a}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.49\textwidth}
+	\begin{subfigure}[b]{0.7\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task3/lowest_energy_one_alpha_run.png}
+		\caption{}
+		\label{fig:optimize_alpha_b}
 	\end{subfigure}
-	\caption{Estimation of the optimal variation parameter $\alpha$ for calculating the lowest energy in the Metropolis algorithm. This estimation is done by running several independent runs for each $\alpha$ (\textit{left}) and also using a long simulation with only one run per $\alpha$ (\textit{right}).}
+	\caption{Estimation of the optimal variation parameter $\alpha$ for calculating the lowest energy in the Metropolis algorithm. This estimation is done by running several independent runs for each $\alpha$ (a) and also using a long simulation with only one run per $\alpha$ (b).}
 	\label{fig:optimize_alpha}
 \end{figure}
 
-In order to determine the best value of the variational parameter $\alpha$, we run the Metropolis using several different $\alpha$ values in the interval $0.05 \leq \alpha \leq 0.25$. We estimate the $\alpha$ dependence in two ways, first by doing short independent runs for the same $\alpha$ and estimating the mean and standard deviation from the average energies of the individual runs, see Fig.~\ref{fig:optimize_alpha} (\textit{left}). The second way we do by taking a long run, about $100$ times longer than the short ones, and estimating the mean and standard deviation of the energy on the single run over time, see Fig.~\ref{fig:optimize_alpha} (\textit{right}). 
+In order to determine the best value of the variational parameter $\alpha$, we run the Metropolis algorithm using several different $\alpha$ values in the interval $0.05 \leq \alpha \leq 0.25$. We estimate the $\alpha$ dependence in two ways, first by doing short independent runs for the same $\alpha$ and estimating the mean and standard deviation from the average energies of the individual runs, see Fig.~\ref{fig:optimize_alpha_a}. The second way we do by taking a long run, about $100$ times longer than the short ones, and estimating the mean and standard deviation of the energy on the single run over time, see Fig.~\ref{fig:optimize_alpha_b}. 
 
 \section*{Problem 4}
 
@@ -166,9 +180,12 @@ Using this method, and with $\beta = 0.75$ we find that the minimum energy to be
 
 \section*{Problem 5}
 
-Using the $\alpha$ found in Problem 4, we do a long simulation in order to see what value we receive. We find our energy to be, $E_{min}=-2.878223$ which lies between the Hartree value $\unit[-2.862]{a.u.}$ and the experimental number $\unit[-2.9033]{a.u.}$
+Using the $\alpha$ found in Problem 4, a long simulation was run in order to see what value we receive. The energy was found to be, $E_{min}=\unit[-2.878223]{a.u.}$ which lies between the Hartree value $\unit[-2.862]{a.u.}$ and the experimental number $\unit[-2.9033]{a.u.}$
 
-$Mean = -2.878153, var = 1.275041E-7$
+The mean and variance found in the simulation were $\unit[-2.878153]{a.u.}$ and $\unit[1.275041 \cdot 10^{-7}]{a.u.}$ respectively.
+%$Mean = -2.878153, var = 1.275041E-7$
+
+TODO errors and limitations of variational MC
 
 
 \bibliography{references}
