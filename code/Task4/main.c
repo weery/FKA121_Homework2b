@@ -41,7 +41,7 @@ int main()
 
     int nbr_of_trials       =   100000;
     int nbr_of_trials_eq    =   1000;
-    int max_p               =   00;
+    int max_p               =   200;
     int nbr_of_runs         =   10;
     int nbr_of_beta_runs    =   4;
 

@@ -27,6 +27,7 @@ for k=1:4
     end
 end
 
+figure
 hold on
 
 for k = 1:4

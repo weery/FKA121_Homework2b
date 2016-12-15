@@ -145,6 +145,20 @@ In order to determine the best value of the variational parameter $\alpha$, we r
 
 \section*{Problem 4}
 
+\begin{figure}[H]
+	\centering
+	\captionsetup[subfigure]{justification=centering}
+	\begin{subfigure}[b]{0.7\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{graphics/task4/beta_dep.png}
+		\caption{}
+		\label{fig:optimize_alpha_a}
+	\end{subfigure}
+	\caption{SOMETHING ABOUT HOW ALPHA CHANGES WITH DIFFERENT BETAS}
+	\label{fig:beta_dep}
+\end{figure}
+
+
 Instead of guessing the optimal $\alpha$ we can instead use a damped steepest decent to reach a local minimum for the $\alpha$. Here we use the update rule in the method,
 \begin{equation}
 \alpha_{p+1} = \alpha_p-\gamma_p \nabla_\alpha E(\alpha_p)
