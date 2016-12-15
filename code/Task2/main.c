@@ -35,6 +35,7 @@ int main()
     double alpha;
 
     int nbr_of_trials       =   1000000;
+    int nbr_of_trials_eq    =   15000;
     int nbr_of_block_trials =   1000;
 
     double* energy                = (double*)malloc(nbr_of_trials*sizeof(double));
@@ -65,9 +66,9 @@ int main()
     }
     fclose(file);
 
-    int nbr_of_trials_eq    =   15000;
-    block_error_estimates(&energy[nbr_of_trials_eq], block_error_estimate, nbr_of_trials-nbr_of_trials_eq, nbr_of_block_trials);
-    double s2= auto_correlation(&energy[nbr_of_trials_eq],nbr_of_trials-nbr_of_trials_eq);
+    block_error_estimates(&energy[nbr_of_trials_eq], block_error_estimate,
+        nbr_of_trials-nbr_of_trials_eq, nbr_of_block_trials);
+    double s2 = auto_correlation(&energy[nbr_of_trials_eq], nbr_of_trials-nbr_of_trials_eq);
 
 
     file = fopen("block_length.dat","w");
@@ -112,12 +113,12 @@ double local_energy(double* r_1, double* r_2, double alpha)
     array_diff(unit_1,unit_2,unit_diff,nbr_of_dimensions);
 
     double term1 = array_mult(unit_diff,r_12,nbr_of_dimensions)/(r12*(1+alpha*r12)*(1+alpha*r12));
-    double term2 = - 1/(r12*(1+alpha*r12)*(1+alpha*r12)*(1+alpha*r12));
-    double term3 = - 1/(4*(1+alpha*r12)*(1+alpha*r12)*(1+alpha*r12)*(1+alpha*r12));
-    double term4 = 1/r12;
+    double term2 = - 1.0/(r12*(1+alpha*r12)*(1+alpha*r12)*(1+alpha*r12));
+    double term3 = - 1.0/(4*(1+alpha*r12)*(1+alpha*r12)*(1+alpha*r12)*(1+alpha*r12));
+    double term4 = 1.0/r12;
 
-    double energy = 0;
-    energy = -4 +term1+term2+term3+term4;
+    double energy = 0.0;
+    energy = -4.0 +term1+term2+term3+term4;
 
     free(unit_1);
     free(unit_2);

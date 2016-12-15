@@ -85,22 +85,22 @@ double auto_correlation(double* data, int N)
 {
     FILE* auto_file;
     auto_file = fopen("auto_correlation.dat","w");
-    double decay_value = exp(-2);
-    double current_decay = 1;
+    double decay_value = exp(-2.0);
+    double current_decay = 1.0;
     int k = 0;
-    int auto_corr=0;
+    int auto_corr = 0;
     fprintf(auto_file, "%i \t %e \n",k, current_decay);
     while (k < 20)
     {
         current_decay = calc_auto_corr(data, N, ++k);
-        if (current_decay < decay_value && auto_corr ==0)
+        if (current_decay < decay_value && auto_corr == 0)
         {
-            auto_corr=k;
+            auto_corr = k;
         }
         fprintf(auto_file, "%i \t %e \n",k, current_decay);
     }
     fclose(auto_file);
-    free(auto_file);
+    
     return auto_corr;
 }
 
@@ -125,7 +125,7 @@ void block_error_estimates(double* data, double* block_error, int N, int b_max)
     for (int i = 1; i < b_max; i++)
     {
         double s = block_correlation(data,N,i);
-        block_error[i]=s;
+        block_error[i] = s;
     }
 }
 
