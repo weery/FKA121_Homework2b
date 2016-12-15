@@ -141,13 +141,13 @@ void  montecarlo(int N,double (*local_e)(double*,double*,double), double (*f)(do
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
 
-    // Start at a probable state to remove the necessity of long equilibration run 
-    r_1[0] = 1;
-    r_1[1] = 0;
-    r_1[2] = 0;
-    r_2[0] = -1;
-    r_2[1] = 0;
-    r_2[2] = 0;
+    // Start at a probable state to remove the necessity of long equilibration run
+    r_1[0] = 1.0;
+    r_1[1] = 0.0;
+    r_1[2] = 0.0;
+    r_2[0] = -1.0;
+    r_2[1] = 0.0;
+    r_2[2] = 0.0;
 
     for (int i = 0; i < N; i++)
     {

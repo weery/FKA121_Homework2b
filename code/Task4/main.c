@@ -41,13 +41,14 @@ int main()
 
     int nbr_of_trials       =   100000;
     int nbr_of_trials_eq    =   1000;
-    int max_p               =   200;
+    int max_p               =   500;
     int nbr_of_runs         =   10;
     int nbr_of_beta_runs    =   4;
 
     #define alpha_p(i,a,p,b) (alpha_p_arr[b*max_p*2*nbr_of_beta_runs+i*max_p*2+a*max_p+p])
     double* alpha_p_arr = (double*)malloc(nbr_of_beta_runs*2*max_p*nbr_of_runs*sizeof(double));
-
+    int size = nbr_of_beta_runs*2*max_p*nbr_of_runs;
+    printf("%i\t%i\t%i\t%i\t%i\n",size, nbr_of_beta_runs,2,max_p, nbr_of_runs );
 
     // ---- Initialize Variables ----
     // ------------------------------
@@ -66,6 +67,7 @@ int main()
         double min_alpha= 100;
         double min_energy = 100;
         double beta = beta_min+(beta_max-beta_min)*(double)(b)/(double)(nbr_of_beta_runs);
+        printf("Beta run: %i\n",b );
         for (int i = 0; i < nbr_of_runs; i++)
         {
             double current_alpha = alpha_0;
@@ -177,12 +179,12 @@ void montecarlo_E_trial(int N ,int equilibrium_time,double (*local_e)(double*,do
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
 
-    r_1[1] = 1.0;
+    r_1[0] = 1.0;
+    r_1[1] = 0.0;
     r_1[2] = 0.0;
-    r_1[3] = 0.0;
-    r_2[1] = -1.0;
+    r_2[0] = -1.0;
+    r_2[1] = 0.0;
     r_2[2] = 0.0;
-    r_2[3] = 0.0;
 
     double* energy              = malloc(sizeof(double)*(N-equilibrium_time));
     double* grad_trial          = malloc(sizeof(double)*(N-equilibrium_time));

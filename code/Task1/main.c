@@ -138,12 +138,12 @@ double  montecarlo(int N, int equilibrium_time,double (*local_e)(double*,double*
     double r_1[nbr_of_dimensions] = { 0 };
     double r_2[nbr_of_dimensions] = { 0 };
 
-    r_1[1] = 1.0;
+    r_1[0] = 1.0;
+    r_1[1] = 0.0;
     r_1[2] = 0.0;
-    r_1[3] = 0.0;
-    r_2[1] = -1.0;
+    r_2[0] = -1.0;
+    r_2[1] = 0.0;
     r_2[2] = 0.0;
-    r_2[3] = 0.0;
 
     double* energy = malloc(sizeof(double)*(N-equilibrium_time));
 
