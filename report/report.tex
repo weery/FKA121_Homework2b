@@ -143,6 +143,23 @@ The results for using the block size can be seen in Fig.\ref{fig:block_error_b} 
 
 In order to determine the best value of the variational parameter $\alpha$, we run the Metropolis algorithm using several different $\alpha$ values in the interval $0.05 \leq \alpha \leq 0.25$. We estimate the $\alpha$ dependence in two ways, first by doing short independent runs for the same $\alpha$ and estimating the mean and standard deviation from the average energies of the individual runs, see Fig.~\ref{fig:optimize_alpha_a}. The second way we do by taking a long run, about $100$ times longer than the short ones, and estimating the mean and standard deviation of the energy on the single run over time, see Fig.~\ref{fig:optimize_alpha_b}. 
 
+The error in Fig.~\ref{fig:optimize_alpha_a} is computed with the formula
+\begin{equation}
+\mathrm{error} = \sqrt{\frac{\mathrm{Var} [ \langle E \rangle_{runs} ]}{N_{runs}}},
+\end{equation}
+where $N_{runs}$ is the number of runs per alpha. When instead running one longer simulation (Fig.~\ref{fig:optimize_alpha_b}) the error is computed as
+\begin{equation}
+\mathrm{error} = \sqrt{\mathrm{Var} [\langle E \rangle ] \frac{s}{N}},
+\end{equation}
+where $s$ is the statistical inefficiency and $N$ the number of trials in the Monte Carlo simulation.
+
+%\begin{equation}
+%ERROR_BAR_SINGLE_ALPHA_RUN = sqrt(variance(Trial)*s/nbr_of_trials)
+%\end{equation}
+%\begin{equation}
+%ERROR_BAR_SEVERAL_ALPHA_RUN = sqrt(variance(MEAN_OF_RUNS)/nbr_of_trials)
+%\end{equation}
+
 \section*{Problem 4}
 
 \begin{figure}[H]
@@ -151,8 +168,6 @@ In order to determine the best value of the variational parameter $\alpha$, we r
 	\begin{subfigure}[b]{0.7\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{graphics/task4/beta_dep.png}
-		\caption{}
-		\label{fig:optimize_alpha_a}
 	\end{subfigure}
 	\caption{Using damped steepest descent for estimating the variational parameter $\alpha$ gives alot of deviations in the early stages, but we can see that we end up around the same region for different $\beta$ parameters in the descent method for larger runs. The final $\alpha$ is around $\approx 0.1435$}
 	\label{fig:beta_dep}
@@ -180,21 +195,13 @@ Using this method, and with $\beta \in \{0.5,0.625,0.75,0.875\}$ $\alpha$ in bet
 
 
 
-\begin{equation}
-ERROR_BAR_SINGLE_ALPHA_RUN = sqrt(variance(Trial)*s/nbr_of_trials)
-\end{equation}
-
-\begin{equation}
-ERROR_BAR_SEVERAL_ALPHA_RUN = sqrt(variance(MEAN_OF_RUNS)/nbr_of_trials)
-\end{equation}
-
 \section*{Problem 5}
 
-Using the $\alpha$ found in Problem 4 (we take $\alpha=0.1435$), a long simulation was run in order to see what value we receive. The energy was found to be, $E_{min}=\unit[-2.878158\pm 0.188E-4]{a.u.}$ which lies between the Hartree value $\unit[-2.862]{a.u.}$ and the experimental number $\unit[-2.9033]{a.u.}$.
+Using the $\alpha$ found in Problem 4 (we use $\alpha=0.1435$), a long simulation was run in order to see what value we receive. The energy was found to be, $E_{min}=\unit[-2.878158\pm 0.188 \cdot 10^{-4}]{a.u.}$ which lies between the Hartree value $\unit[-2.862]{a.u.}$ and the experimental number $\unit[-2.9033]{a.u.}$.
 
-We see that we get a value closer to the experimental one than the Hartree value, but we have not come the full way. This might be due to several thing. First it might be due to that our estimate of the variational parameter $\alpha$ is insufficient, but since we got reasonably consistent results for the damped deepest descent method we think we did not reach a local minimum. 
+We see that we get a value closer to the experimental one than the Hartree value, but we have not come the full way. This might be due to several things. First it might be due to that our estimate of the variational parameter $\alpha$ is insufficient, but since we got reasonably consistent results for the damped deepest descent method we think we did not reach a local minimum.
 
-Other limitations could be that our simulation parameters aren't optimized, such as the number of trials in the Monte Carlos algorithm or the update spacing parameter $d$ might be wrongly estimated, even though we get around $0.5$ acceptance ratio. 
+Other limitations could be that our simulation parameters aren't optimized, such as the number of trials in the Monte Carlo simulation or the update spacing parameter $d$ might be wrongly estimated, even though we get around $0.5$ acceptance ratio.
 
 But most likely it lies with the assumptions for the problem, e.g. the trail wave function might not be the true wave function and then we can never reach the real estimate of the ground state energy.
 
@@ -220,8 +227,17 @@ But most likely it lies with the assumptions for the problem, e.g. the trail wav
 \subsection{\texttt{Task3/main.c}}
 \lstinputlisting[language=c, numbers=left]{../code/Task3/main.c}
 
+\subsection{\texttt{Task3/plot\_alpha\_energy.m}}
+\lstinputlisting[language=matlab, numbers=left]{../code/Task3/plot_alpha_energy.m}
+
+\subsection{\texttt{Task3/plot\_alpha\_means.m}}
+\lstinputlisting[language=matlab, numbers=left]{../code/Task3/plot_alpha_means.m}
+
 \subsection{\texttt{Task4/main.c}}
 \lstinputlisting[language=c, numbers=left]{../code/Task4/main.c}
+
+\subsection{\texttt{Task4/plot\_alpha\_energy.m}}
+\lstinputlisting[language=c, numbers=left]{../code/Task4/plot_alpha_energy.m}
 
 \subsection{\texttt{Task5/main.c}}
 \lstinputlisting[language=c, numbers=left]{../code/Task5/main.c}
