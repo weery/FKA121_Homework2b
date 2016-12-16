@@ -13,7 +13,7 @@ hold on
 [min_alpha, min_alpha_idx]=min(mean_alpha);
 plot(alpha_energy(min_alpha_idx,1),mean_alpha(min_alpha_idx),'rx')
 
-min_energy_plot=-2.881;
+min_energy_plot=-2.880;
 
 plot([alpha_energy(min_alpha_idx,1) alpha_energy(min_alpha_idx,1)],[min_energy_plot,mean_alpha(min_alpha_idx)],'k--')
 plot([alpha_energy(1,1) alpha_energy(min_alpha_idx,1)],[mean_alpha(min_alpha_idx),mean_alpha(min_alpha_idx)],'k--')

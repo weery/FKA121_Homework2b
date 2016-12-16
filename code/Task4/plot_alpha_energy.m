@@ -4,7 +4,7 @@ alpha_energy=importdata('alpha.dat');
 
 size_alpha=size(alpha_energy);
 
-sim_length = 500;
+sim_length = 400;
 
 % make new loop that starts at k=1:4
 % and start in alpha_energy ((k-1)*200)
@@ -43,5 +43,5 @@ legend({'$\beta = 0.5$','$\beta = 0.625$','$\beta = 0.75$','$\beta = 0.875$'},'i
 
 xlabel('Run $p$ [$\#$]','interpreter','latex','fontsize',19)
 ylabel('$\alpha$ [$\#$]','interpreter','latex','fontsize',19)
-title('Estimation of $\alpha$ which yeild lowest energy','interpreter','latex','fontsize',19)
+title('Estimation of $\alpha$ using damped steepest descent','interpreter','latex','fontsize',19)
 xlim([startShift, sim_length])

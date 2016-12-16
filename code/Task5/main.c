@@ -35,7 +35,7 @@ int main()
     double e4pi;
     double alpha;
 
-    int nbr_of_trials       = 10000000;
+    int nbr_of_trials       = 10000;
     int nbr_of_trials_eq    = 1000;
     int nbr_of_runs         = 1000;
 
@@ -49,7 +49,7 @@ int main()
     e       = 1.0;
     m_e     = 1.0;
     e4pi    = 1.0;
-    alpha   = 0.1431064;
+    alpha   = 0.1435;
 
 
     // ======== MONTE CARLO SIMULATION ========
@@ -64,7 +64,7 @@ int main()
     double var_energy_tot = calc_var(mean_energy,nbr_of_runs);
 
     printf("E_0: %e \n", mean_energy_tot);
-    printf("Var: %e \n", var_energy_tot );
+    printf("Var: %e \n", sqrt(var_energy_tot/(double)(nbr_of_runs)) );
 
     free (energy);
     free (mean_energy);
