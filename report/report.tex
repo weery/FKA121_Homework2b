@@ -178,6 +178,16 @@ where $\mathcal{R}$ is the electron state configurations and the averages are ca
 
 Using this method, and with $\beta \in \{0.5,0.625,0.75,0.875\}$ $\alpha$ in between $0.143$ and $0.144$. This is not exactly consistent with the result in Problem 3, but since we have not discretiziced the $\alpha$ space and made a more mathematically rigorous optimization in different ways which gives consistent results we think this is a better estimate.
 
+
+
+\begin{equation}
+ERROR_BAR_SINGLE_ALPHA_RUN = sqrt(variance(Trial)*s/nbr_of_trials)
+\end{equation}
+
+\begin{equation}
+ERROR_BAR_SEVERAL_ALPHA_RUN = sqrt(variance(MEAN_OF_RUNS)/nbr_of_trials)
+\end{equation}
+
 \section*{Problem 5}
 
 Using the $\alpha$ found in Problem 4 (we take $\alpha=0.1435$), a long simulation was run in order to see what value we receive. The energy was found to be, $E_{min}=\unit[-2.878158\pm 0.188E-4]{a.u.}$ which lies between the Hartree value $\unit[-2.862]{a.u.}$ and the experimental number $\unit[-2.9033]{a.u.}$.
