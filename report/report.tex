@@ -176,30 +176,17 @@ where $\mathcal{R}$ is the electron state configurations and the averages are ca
 \nabla_\alpha \ln{\psi_T(\mathcal{R})} = -\frac{r_{12}^2}{2(1+\alpha r_{12})^2}.
 \end{equation}
 
-Using this method, and with $\beta = 0.75$ we find that the minimum energy to be $E_{min}=-2.891$ with the corresponding $\alpha$ as $\alpha_{min}=0.1426$. This found $\alpha$ lies between the two results gained in Problem 3.
-
-\begin{table}[H]
-	\centering
-	\caption{Put some capton here.}
-	\begin{tabular}{|l|cc|}
-		\hline $\beta$ & $\alpha$ & $Energy_{min}$ \\ \hline
-		 0.5 & 0.1434688 & -2.893317 \\ \hline
-		 0.625 & 0.1434688 & -2.893317 \\ \hline
-		 0.75 & 0.1431064 & -2.892874 \\ \hline
-		 0.875 & 0.1427814 & -2.893997 \\ \hline
-	\end{tabular}
-	\label{tab:prob5}
-\end{table}
-
+Using this method, and with $\beta \in \{0.5,0.625,0.75,0.875\}$ $\alpha$ in between $0.143$ and $0.144$. This is not exactly consistent with the result in Problem 3, but since we have not discretiziced the $\alpha$ space and made a more mathematically rigorous optimization in different ways which gives consistent results we think this is a better estimate.
 
 \section*{Problem 5}
 
-Using the $\alpha$ found in Problem 4, a long simulation was run in order to see what value we receive. The energy was found to be, $E_{min}=\unit[-2.878223]{a.u.}$ which lies between the Hartree value $\unit[-2.862]{a.u.}$ and the experimental number $\unit[-2.9033]{a.u.}$
+Using the $\alpha$ found in Problem 4 (we take $\alpha=0.1435$), a long simulation was run in order to see what value we receive. The energy was found to be, $E_{min}=\unit[-2.878158\pm 0.188E-4]{a.u.}$ which lies between the Hartree value $\unit[-2.862]{a.u.}$ and the experimental number $\unit[-2.9033]{a.u.}$.
 
-The mean and variance found in the simulation were $\unit[-2.878153]{a.u.}$ and $\unit[1.275041 \cdot 10^{-7}]{a.u.}$ respectively.
-%$Mean = -2.878153, var = 1.275041E-7$
+We see that we get a value closer to the experimental one than the Hartree value, but we have not come the full way. This might be due to several thing. First it might be due to that our estimate of the variational parameter $\alpha$ is insufficient, but since we got reasonably consistent results for the damped deepest descent method we think we did not reach a local minimum. 
 
-TODO errors and limitations of variational MC
+Other limitations could be that our simulation parameters aren't optimized, such as the number of trials in the Monte Carlos algorithm or the update spacing parameter $d$ might be wrongly estimated, even though we get around $0.5$ acceptance ratio. 
+
+But most likely it lies with the assumptions for the problem, e.g. the trail wave function might not be the true wave function and then we can never reach the real estimate of the ground state energy.
 
 
 \bibliography{references}

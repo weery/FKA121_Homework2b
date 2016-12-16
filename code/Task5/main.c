@@ -37,7 +37,7 @@ int main()
 
     int nbr_of_trials       = 10000;
     int nbr_of_trials_eq    = 1000;
-    int nbr_of_runs         = 1000;
+    int nbr_of_runs         = 10000;
 
     double* rads            = (double*)malloc(nbr_of_trials*2*sizeof(double));
     double* angle_diff      = (double*)malloc(nbr_of_trials*sizeof(double));
